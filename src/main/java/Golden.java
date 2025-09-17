@@ -28,11 +28,11 @@ public class Golden {
     private void printMarkItem(int number, boolean isMark){
         if (isMark){
             String message = "Nice! I have marked this task as done:\n";
-            message += myList.printTask(number);
+            message += myList.getTask(number);
             Helper.formatReply(message);
         } else {
             String message = "OK, I've marked this task as not done yet:\n";
-            message += myList.printTask(number);
+            message += myList.getTask(number);
             Helper.formatReply(message);
         }
     }
@@ -44,7 +44,7 @@ public class Golden {
                 int number = Integer.parseInt(partsOfString[1]);
                 // Guard: check if number is in range
                 if (Helper.checkNumberInRange(1, myList.getListSize(), number)){
-                    myList.markTask(number);
+                    myList.markTask(number, true);
                     printMarkItem(number, true);
                 } else {
                     Helper.formatReply("Number out of range");
@@ -64,7 +64,7 @@ public class Golden {
                 int number = Integer.parseInt(partsOfString[1]);
                 // Guard: check if number is in range
                 if (Helper.checkNumberInRange(1, myList.getListSize(), number)){
-                    myList.unmarkTask(number);
+                    myList.markTask(number, false);
                     printMarkItem(number, false);
                 } else {
                     Helper.formatReply("Number out of range");
@@ -76,7 +76,6 @@ public class Golden {
         } else
             System.out.println("unmark input has the wrong format");
     }
-
     private void parseInput(String s) {
         if (s.contains("bye")){
             sayBye();
@@ -92,6 +91,7 @@ public class Golden {
             printAddedItem(s);
         }
     }
+
 
     public static void main(String[] args) {
         Golden bot = new Golden();

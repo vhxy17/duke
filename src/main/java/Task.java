@@ -2,21 +2,21 @@ public class Task {
     private String description;
     private boolean isDone;
 
-    public Task(String s){
-        this.description = s;
+    protected Task(String description){
+        this.description = description.trim();
         this.isDone = false;
     }
-    public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+    private String getStatusIcon() {
+        // mark 'done' task with X
+        return (isDone ? "X" : " ");
     }
-    public String getTask(){
-        return String.format("[%s] %s", getStatusIcon(), description);
+    protected String getTaskDescription(){
+        return this.description;
     }
-
-    public void markAsDone(){
-        this.isDone = true;
+    protected String getTask(){
+        return String.format("[%s] %s", getStatusIcon(), getTaskDescription());
     }
-    public void unmarkAsDone(){
-        this.isDone = false;
+    protected void setIsDone(boolean isDone){
+        this.isDone = isDone;
     }
 }

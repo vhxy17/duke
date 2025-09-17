@@ -7,7 +7,6 @@ public class CustomList {
         taskList = new Task[100];
         count = 0;
     }
-
     protected void addToList(String taskDescription){
         // checks tasklist capacity before adding new task
         if (count < taskList.length) {
@@ -17,11 +16,9 @@ public class CustomList {
             System.out.println("List is full!");
         }
     }
-
     protected int getListSize(){
         return count;
     }
-
     protected String getList() {
         if (count == 0){
             return "Great news! You have no pending tasks right now.";
@@ -37,17 +34,10 @@ public class CustomList {
         }
         return message;
     }
-
-    public void markTask(int taskNumber){
-        taskList[taskNumber-1].markAsDone();
+    protected void markTask(int taskNumber, boolean isMark){
+        taskList[taskNumber-1].setIsDone(isMark);
     }
-
-    public void unmarkTask(int taskNumber){
-        // Guard: check if number is in range
-        taskList[taskNumber-1].unmarkAsDone();
-    }
-
-    public String printTask(int taskNumber){
+    protected String getTask(int taskNumber){
         return taskList[taskNumber-1].getTask();
     }
 }
