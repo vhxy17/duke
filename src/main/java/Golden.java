@@ -2,40 +2,94 @@ import java.util.Scanner;
 
 public class Golden {
     private static String botName = "Golden";
-    private static String lineBreak = "---------------------------------------------";
     private static CustomList myList = new CustomList();
 
-    private static String addIndentation(String s){
-        // Add indentation at the start and after every newline
-        return "\t" + s.replace("\n", "\n\t");
-    }
-    private void formatReply(String s){
-        System.out.println(lineBreak);
-        System.out.println(addIndentation(s));
-        System.out.println(lineBreak);
-    }
     private void greet() {
-        String message = String.format("Hello! I'm  %s.\nWhat can I do for you?\n", botName);
-        formatReply(message);
+//        String message = String.format("Hello! I'm  %s.\nWhat can I do for you?", botName);
+        Helper.formatReply(String.format("Hello! I'm  %s.\nWhat can I do for you?", botName));
     }
-    private void bye() {
-        String message = "Bye. Hope to see you again soon!";
-        formatReply(message);
+    private void sayBye() {
+//        String message = "Bye. Hope to see you again soon!";
+        Helper.formatReply("Bye. Hope to see you again soon!");
     }
     private void echo(String s) {
-        formatReply(s);
+        Helper.formatReply(s);
+    }
+    private void addToList(String s){
+        myList.addToList(s);
+    }
+    private void printAddedItem(String s){
+        String message = "added: " + s;
+        Helper.formatReply(message);
+    }
+    private void printList(){
+        Helper.formatReply(myList.getList());
+    }
+    private void printMarkItem(int number, boolean isMark){
+        if (isMark){
+            String message = "Nice! I have marked this task as done:\n";
+            message += myList.printTask(number);
+            Helper.formatReply(message);
+        } else {
+            String message = "OK, I've marked this task as not done yet:\n";
+            message += myList.printTask(number);
+            Helper.formatReply(message);
+        }
+    }
+    private void mark(String s){
+        // split string by spaces
+        String[] partsOfString = s.split(" ");
+        if (partsOfString.length==2){
+            try {
+                int number = Integer.parseInt(partsOfString[1]);
+                // Guard: check if number is in range
+                if (Helper.checkNumberInRange(1, myList.getListSize(), number)){
+                    myList.markTask(number);
+                    printMarkItem(number, true);
+                } else {
+                    Helper.formatReply("Number out of range");
+                    return;
+                }
+            } catch (NumberFormatException e){
+                Helper.formatReply("Invalid number after 'mark'.");
+            }
+        } else
+            System.out.println("mark input has the wrong format");
+    }
+    private void unmark(String s){
+        // split string by spaces
+        String[] partsOfString = s.split(" ");
+        if (partsOfString.length==2){
+            try {
+                int number = Integer.parseInt(partsOfString[1]);
+                // Guard: check if number is in range
+                if (Helper.checkNumberInRange(1, myList.getListSize(), number)){
+                    myList.unmarkTask(number);
+                    printMarkItem(number, false);
+                } else {
+                    Helper.formatReply("Number out of range");
+                    return;
+                }
+            } catch (NumberFormatException e){
+                Helper.formatReply("Invalid number after 'unmark'.");
+            }
+        } else
+            System.out.println("unmark input has the wrong format");
     }
 
     private void parseInput(String s) {
         if (s.contains("bye")){
-            bye();
+            sayBye();
         } else if (s.equals("list")){
-            formatReply(myList.printList());
+            printList();
+        } else if (s.startsWith("mark ")){
+            mark(s);
+        } else if (s.startsWith("unmark ")){
+            unmark(s);
         }
         else {
-            myList.addToList(s);
-            String message = "added: " + s;
-            formatReply(message);
+            addToList(s);
+            printAddedItem(s);
         }
     }
 
