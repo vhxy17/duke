@@ -1,22 +1,13 @@
-public class Task {
+public abstract class Task {
     private String description;
-    private boolean isDone;
 
-    protected Task(String description){
+    public Task(String description) {
         this.description = description.trim();
-        this.isDone = false;
     }
-    private String getStatusIcon() {
-        // mark 'done' task with X
-        return (isDone ? "X" : " ");
-    }
-    protected String getTaskDescription(){
+
+    protected String getTaskDescription() {
         return this.description;
     }
-    protected String getTask(){
-        return String.format("[%s] %s", getStatusIcon(), getTaskDescription());
-    }
-    protected void setIsDone(boolean isDone){
-        this.isDone = isDone;
-    }
+
+    public abstract String toString();
 }

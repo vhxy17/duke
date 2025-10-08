@@ -1,0 +1,10 @@
+public final class StaticConfig {
+    public static final int MAX_TASKS = 100;    // sets the hard limit for TaskList
+    public static final String APP_NAME = "Golden";
+}
+
+/*
+* This class defines all the constants of the Chatbot app.
+* static = the attributes are shared across all instances
+* final = the values cannot be changed
+* */
