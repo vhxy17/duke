@@ -1,21 +1,18 @@
-public class Deadline extends Todo{
-    private String by;
+public class Deadline extends Task{
+    private String endDate;
 
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+        this.endDate = by;
     }
-
     protected void setBy(String by){
-        this.by = by;
+        this.endDate = by;
     }
-
     protected String getBy(){
-        return by;
+        return endDate;
     }
-
     @Override
     public String toString() {
-        return String.format("[D][%s] %s (by: %s)", getStatusIcon(), getTaskDescription(), getBy());
+        return String.format("[D][%s] %s (by: %s)", getDoneStatusIcon(), getTaskDescription(), getBy());
     }
 }

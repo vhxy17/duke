@@ -1,21 +1,27 @@
-public class Event extends Deadline{
-    String start;
+public class Event extends Task{
+    String startDate;
+    String endDate;
 
-    public Event(String description, String start, String by){
-        super(description, by);
-        this.start = start;
+    public Event(String description, String from, String to){
+        super(description);
+        this.startDate = from;
+        this.endDate = to;
     }
 
     protected void setStart(String start){
-        this.start = start;
+        this.startDate = start;
     }
 
-    protected String getStart(){
-        return start;
+    protected String getStartDate(){
+        return startDate;
+    }
+    protected String getEndDate(){
+        return endDate;
     }
 
     @Override
     public String toString() {
-        return String.format("[E][%s] %s (from: %s to: %s)", getStatusIcon(), getTaskDescription(), getStart(), getBy());
+        return String.format("[E][%s] %s (from: %s to: %s)",
+                getDoneStatusIcon(), getTaskDescription(), getStartDate(), getEndDate());
     }
 }

@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class Golden {
     private final String botName = StaticConfig.APP_NAME;
     private final CustomList botList = new CustomList();        //list belongs to the chatbot
-//    private final LineParser parser = new LineParser();  // removed- decision to make LineParser a stateless, generic utility function
     private final BotActions actions = new BotActions(botName, botList);
+//    private final LineParser parser = new LineParser();  // removed- decision to make LineParser a stateless, generic utility function
 
     public static void main(String[] args) {
         Golden bot = new Golden();
