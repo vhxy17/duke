@@ -1,5 +1,6 @@
 public final class Helper {         // 'final' is used to prevent a new Helper class
-    private static final String lineBreak = "-------------------------------------------------------";
+    private static final String lineBreak =
+            "---------------------------------------------------------------------------------------------------------";
 
     // override default public constructor method and makes it private; prevents instantiation by other classes
     private Helper(){}
@@ -17,10 +18,13 @@ public final class Helper {         // 'final' is used to prevent a new Helper c
     public static void printFormattedReply(String rawReply){
         System.out.println(formatReply(rawReply));
     }
-    public static boolean checkNumberInRange(int lowerLimit, int upperLimit, int number ){
+    public static boolean isNumberInRange(int lowerLimit, int upperLimit, int number ){
         if (number < lowerLimit || number > upperLimit){
             return false;
         }
         return true;
+    }
+    public static boolean hasMissingArgs(String[] parts, int targetArgCount){
+        return !(parts.length == targetArgCount);
     }
 }

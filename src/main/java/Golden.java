@@ -1,3 +1,5 @@
+import Exceptions.BotException;
+
 import javax.sound.sampled.Line;
 import java.util.Scanner;
 
@@ -8,7 +10,7 @@ public class Golden {
     private final BotActions actions = new BotActions(botName, botList);
 //    private final LineParser parser = new LineParser();  // removed- decision to make LineParser a stateless, generic utility function
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BotException {
         Golden bot = new Golden();
         bot.actions.greet();
 
@@ -16,7 +18,11 @@ public class Golden {
         boolean running = true;
         while (running){
             String line = input.nextLine();
-            running = LineParser.parseInput(line, bot.actions);
+            try {
+                running = LineParser.parseInput(line, bot.actions);
+            } catch (BotException e){
+                Helper.printFormattedReply(e.toString());
+            }
         }
     }
 }

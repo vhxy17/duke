@@ -1,3 +1,6 @@
+import Exceptions.ValidationErrors.IllegalArgumentException;
+import Exceptions.ValidationErrors.IndexOutOfBoundsException;
+
 public class CustomList {
     private static Task[] taskList;
     private int listSize;
@@ -43,19 +46,21 @@ public class CustomList {
         }
         return message;
     }
-    protected void markTask(int taskNumber, boolean isMark){
-        if (taskNumber < 1 || taskNumber > listSize){
-            throw new IndexOutOfBoundsException();
-        }
-        if (isMark){
-            taskList[taskNumber-1].markDone();
+    protected void markTask(int taskNumber, boolean isMark) throws IllegalArgumentException{
+        if (Helper.isNumberInRange(1, getSize(), taskNumber)){
+            if (isMark){
+                taskList[taskNumber-1].markDone();
+            } else {
+                taskList[taskNumber-1].markUndone();
+            }
         } else {
-            taskList[taskNumber-1].markUndone();            
+            throw new IllegalArgumentException("Number out of range");
         }
     }
-    protected Task getTask(int taskIndex){
+    protected Task getTask(int taskNumber) throws IndexOutOfBoundsException {
+        int taskIndex = taskNumber - 1;
         if (taskIndex < 0 || taskIndex > listSize){
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException(taskIndex);
         }
         return taskList[taskIndex];
     }
