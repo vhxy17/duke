@@ -69,6 +69,19 @@ public final class LineParser {
                 actions.addToList(trimmedLine);
                 return true;
 
+            case "delete":
+                if (Helper.hasMissingArgs(parts, 2)){
+                    throw new MissingArgumentException("task description");
+                }
+                try {
+                    int listNumber = Integer.parseInt(parts[1].trim());
+                    actions.delete(listNumber);
+                    return true;
+                } catch (NumberFormatException e) {
+                    String arg = parts[1].trim();
+                    throw new IllegalArgumentException(arg);
+                }
+
             default:
 //                actions.echo(trimmedLine);
 //                return true;

@@ -1,23 +1,25 @@
 import Exceptions.ValidationErrors.IllegalArgumentException;
 import Exceptions.ValidationErrors.IndexOutOfBoundsException;
+import java.util.ArrayList;
 
 public class CustomList {
-    private static Task[] taskList;
-    private int listSize;
+//    private static Task[] taskList;
+    // Change from Task[] to ArrayList
+    private static ArrayList<Task> taskList;
+    private static int listSize;
 
     public CustomList(){
-        // instantiates an array with a preset max task limit
-        taskList = new Task[StaticConfig.MAX_TASKS];
-        listSize = 0;
+        // instantiate an array with a preset max task limit
+//        taskList = new Task[StaticConfig.MAX_TASKS];
+        taskList = new ArrayList<Task>();
     }
     protected int getSize(){
-        return listSize;
+        return taskList.size();
     }
     protected void addTask(Task task){
         // checks tasklist capacity before adding new task
-        if (listSize < taskList.length) {
-            taskList[listSize] = task;
-            listSize++;
+        if (taskList.size() < StaticConfig.MAX_TASKS) {
+            taskList.add(task);
         } else {
             System.out.println("List is full!");
         }
@@ -32,14 +34,14 @@ public class CustomList {
         addTask(new Event(taskDescription, startDate, endDate));
     }
     protected String getList() {
-        if (listSize == 0){
+        if (taskList.size() == 0){
             return "Great news! You have no pending tasks right now.";
         }
         String message = "Here are the tasks in your list:\n";
-        for (int i = 0; i < listSize; i++){
+        for (int i = 0; i < taskList.size(); i++){
             int number = i+1;
             message += String.format("%d.", number);
-            message += taskList[i].toString();
+            message += taskList.get(i).toString();
             if (number != listSize){
                 message += "\n";
             }
@@ -47,21 +49,29 @@ public class CustomList {
         return message;
     }
     protected void markTask(int taskNumber, boolean isMark) throws IllegalArgumentException{
-        if (Helper.isNumberInRange(1, getSize(), taskNumber)){
+        int taskIndex = taskNumber - 1;
+        if (Helper.isNumberInRange(1, taskList.size(), taskNumber)){
             if (isMark){
-                taskList[taskNumber-1].markDone();
+                taskList.get(taskIndex).markDone();
             } else {
-                taskList[taskNumber-1].markUndone();
+                taskList.get(taskIndex).markUndone();
             }
         } else {
             throw new IllegalArgumentException("Number out of range");
         }
     }
-    protected Task getTask(int taskNumber) throws IndexOutOfBoundsException {
+    protected Task getTask(int taskNumber) throws IllegalArgumentException {
         int taskIndex = taskNumber - 1;
-        if (taskIndex < 0 || taskIndex > listSize){
-            throw new IndexOutOfBoundsException(taskIndex);
+        if (!Helper.isNumberInRange(1, taskList.size(), taskNumber)) {
+            throw new IllegalArgumentException("Number out of range");
         }
-        return taskList[taskIndex];
+        return taskList.get(taskIndex);
+    }
+    protected Task deleteTask(int taskNumber) throws IllegalArgumentException {
+        int taskIndex = taskNumber - 1;
+        if (!Helper.isNumberInRange(1, taskList.size(), taskNumber)) {
+            throw new IllegalArgumentException("Number out of range");
+        }
+        return taskList.remove(taskIndex);
     }
 }

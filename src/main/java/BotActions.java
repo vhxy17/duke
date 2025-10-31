@@ -31,19 +31,20 @@ public class BotActions {
         Helper.printFormattedReply(s);
     }
 
-    private void printAddedItem() throws IndexOutOfBoundsException {
+    private void printAddedItem() throws IllegalArgumentException {
         Helper.printFormattedReply("Got it. I've added this task:\n"
                 + myList.getTask(getLastTaskNumber()).toString()
                 + "\nNow you have " + myList.getSize() + " task(s) in the list.");
     }
 
-    public void addToList(String trimmedString) throws IndexOutOfBoundsException {
+    public void addToList(String trimmedString) throws IllegalArgumentException {
         String[] parts = trimmedString.split("\\s+", 2);
         String taskType = parts[0].toLowerCase();    //leading whitespace already removed in previous step
         String taskDescription = parts[1].toLowerCase();
 
         if (taskType.equalsIgnoreCase("todo")) {
             myList.addTodo(taskDescription);
+            System.out.println("bp 1");
             printAddedItem();
         } else if (taskType.equalsIgnoreCase("deadline")) {
             String[] partsOfDescription = Pattern.compile("(?i)\\Q/by\\E").split(taskDescription, 2);
@@ -66,26 +67,22 @@ public class BotActions {
         Helper.printFormattedReply(myList.getList());
     }
 
-    public void printMarkItem(int number, boolean isMark) {
+    public void printMarkItem(int number, boolean isMark) throws IllegalArgumentException {
         if (isMark) {
-            try {
-                String message = "Nice! I have marked this task as done:\n";
-                message += myList.getTask(number);
-                Helper.printFormattedReply(message);
-            } catch (IndexOutOfBoundsException e) {
-                Helper.printFormattedReply(e.toString());
-            }
-
+            String message = "Nice! I have marked this task as done:\n";
+            message += myList.getTask(number);
+            Helper.printFormattedReply(message);
         } else {
-            try {
-                String message = "OK, I've marked this task as not done yet:\n";
-                message += myList.getTask(number);
-                Helper.printFormattedReply(message);
-            } catch (IndexOutOfBoundsException e) {
-                Helper.printFormattedReply(e.toString());
-            }
-
+            String message = "OK, I've marked this task as not done yet:\n";
+            message += myList.getTask(number);
+            Helper.printFormattedReply(message);
         }
+    }
+    public void printDeletedItem(String taskDescription) {
+        String message = "Done! I have removed this task:\n";
+        message += "\t\t" + taskDescription;
+        message += "\nYou have " + myList.getSize() + " tasks in the list.";
+        Helper.printFormattedReply(message);
     }
 
     public void mark(int listNumber) throws IllegalArgumentException {
@@ -96,5 +93,11 @@ public class BotActions {
     public void unmark(int listNumber) throws IllegalArgumentException  {
             myList.markTask(listNumber, false);
             printMarkItem(listNumber, false);
+    }
+
+    public void delete(int listNumber) throws IllegalArgumentException  {
+        String deletedTask = myList.getTask(listNumber).toString();
+        myList.deleteTask(listNumber);
+        printDeletedItem(deletedTask);
     }
 }
