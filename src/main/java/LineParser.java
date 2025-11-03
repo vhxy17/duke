@@ -1,8 +1,9 @@
+import Exceptions.BotException;
 import Exceptions.ParseErrors.UnknownCommandException;
 import Exceptions.ValidationErrors.IndexOutOfBoundsException;
 import Exceptions.ValidationErrors.MissingArgumentException;
 import Exceptions.ValidationErrors.IllegalArgumentException;
-import Exceptions.ValidationErrors.*;
+//import Exceptions.ValidationErrors.*;
 
 public final class LineParser {
     // overrides default public constructor method and makes it private
@@ -31,6 +32,7 @@ public final class LineParser {
                 return false;
 
             case "list":
+                // to update to load from file
                 actions.printList();
                 return true;
 
@@ -66,7 +68,12 @@ public final class LineParser {
                 if (Helper.hasMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task description");
                 }
-                actions.addToList(trimmedLine);
+                try {
+                    actions.addToList(trimmedLine);
+                } catch (BotException e) {
+                    Helper.printFormattedReply(e.toString());
+                }
+
                 return true;
 
             case "delete":
@@ -81,7 +88,6 @@ public final class LineParser {
                     String arg = parts[1].trim();
                     throw new IllegalArgumentException(arg);
                 }
-
             default:
 //                actions.echo(trimmedLine);
 //                return true;

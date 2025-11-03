@@ -1,6 +1,7 @@
 public final class StaticConfig {
     public static final int MAX_TASKS = 100;    // sets the hard limit for TaskList
     public static final String APP_NAME = "Golden";
+    public static final String INIT_FILEPATH = "src/main/data/test1.txt";
 }
 
 /*

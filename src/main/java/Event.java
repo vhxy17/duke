@@ -7,8 +7,13 @@ public class Event extends Task{
         this.startDate = from;
         this.endDate = to;
     }
+    public Event(String description, boolean isDone, String from, String to){
+        super(description, isDone);
+        this.startDate = from;
+        this.endDate = to;
+    }
 
-    protected void setStart(String start){
+    protected void setStartDate(String start){
         this.startDate = start;
     }
 
@@ -20,8 +25,17 @@ public class Event extends Task{
     }
 
     @Override
+    protected char renderTypeTag(){
+        return 'E';
+    }
+    @Override
+    public String serialise(){
+        return String.format("%c | %c | %s | %s | %s", renderTypeTag(), renderStatusDigit(),
+                getTaskDescription(), getStartDate(), getEndDate());
+    }
+    @Override
     public String toString() {
-        return String.format("[E][%s] %s (from: %s to: %s)",
-                getDoneStatusIcon(), getTaskDescription(), getStartDate(), getEndDate());
+        return String.format("[%c][%c] %s (from: %s to: %s)", renderTypeTag(),
+                renderStatusCharacter(), getTaskDescription(), getStartDate(), getEndDate());
     }
 }
