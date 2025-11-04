@@ -7,6 +7,7 @@ import com.golden.model.Task;
 import com.golden.model.Todo;
 import com.golden.util.Helper;
 import java.util.ArrayList;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class CustomList implements Iterable<Task> {
     //    private static Task[] taskList;

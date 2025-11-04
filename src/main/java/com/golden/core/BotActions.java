@@ -6,20 +6,15 @@ import java.util.regex.Pattern;
 import com.golden.exceptions.storageErrors.StorageFormatException;
 import com.golden.storage.Storage;
 import com.golden.util.Helper;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class BotActions {
-    private final String botName;
     CustomList myList;
     Storage storage;
 
-    public BotActions(String name, CustomList list, Storage storage) {
-        this.botName = name;
+    public BotActions(CustomList list, Storage storage) {
         this.myList = list;
         this.storage = storage;
-    }
-
-    private String getBotName() {
-        return botName;
     }
 
     private int getLastTaskNumber() {
@@ -100,7 +95,11 @@ public class BotActions {
 
     public void delete(int listNumber) throws IllegalArgumentException  {
         String deletedTask = myList.getTask(listNumber).toString();
-        myList.deleteTask(listNumber);
+        try {
+            myList.deleteTask(listNumber);
+        } catch (IllegalArgumentException e){
+            Helper.printFormattedReply(e.toString());
+        }
         printDeletedItem(deletedTask);
     }
 }

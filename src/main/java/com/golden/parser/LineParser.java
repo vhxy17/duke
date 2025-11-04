@@ -1,26 +1,16 @@
 package com.golden.parser;
 
-//import Exceptions.BotException;
-//import Exceptions.ParseErrors.UnknownCommandException;
-//import Exceptions.ValidationErrors.IndexOutOfBoundsException;
-//import Exceptions.ValidationErrors.MissingArgumentException;
-//import Exceptions.ValidationErrors.IllegalArgumentException;
-//import Exceptions.ValidationErrors.*;
-
 import com.golden.core.BotActions;
 import com.golden.exceptions.*;
 import com.golden.exceptions.parseErrors.UnknownCommandException;
 import com.golden.exceptions.validationErrors.MissingArgumentException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.util.Helper;
 
 public final class LineParser {
     // overrides default public constructor method and makes it private
     // blocks anyone outside the class from instantiating new LineParser()
     private LineParser(){}
-
-//    public static boolean hasMissingArgs(String[] parts, int targetArgCount){
-//        return !(parts.length == targetArgCount);
-//    }
 
     public static boolean parseInput(String line, BotActions actions) throws MissingArgumentException,
             UnknownCommandException, IllegalArgumentException, IndexOutOfBoundsException {

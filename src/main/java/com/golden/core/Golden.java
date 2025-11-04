@@ -27,7 +27,7 @@ public class Golden {
     public Golden(String filePath) throws BotException {
         storage = new Storage(filePath);
         tasks = new CustomList(storage.loadFile());
-        actions = new BotActions(botName, tasks, storage);
+        actions = new BotActions(tasks, storage);
     }
 
     public void run(){
