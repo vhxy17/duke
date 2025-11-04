@@ -1,4 +1,4 @@
-package com.golden.model;
+package com.golden.task;
 
 public abstract class Task {
     private String description;

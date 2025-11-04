@@ -1,12 +1,11 @@
 package com.golden.parser;
 
 import com.golden.core.BotActions;
-import com.golden.exceptions.*;
+import com.golden.util.Helper;
 import com.golden.exceptions.parseErrors.UnknownCommandException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.exceptions.validationErrors.MissingArgumentException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
-import com.golden.util.Helper;
 
 public final class LineParser {
     // overrides default public constructor method and makes it private
@@ -14,8 +13,7 @@ public final class LineParser {
     private LineParser(){}
 
     public static boolean parseInput(String line, BotActions actions) throws MissingArgumentException,
-            UnknownCommandException, IllegalArgumentException, IndexOutOfBoundsException,
-            StorageFileParseException {
+            IllegalArgumentException, UnknownCommandException, StorageFileParseException {
         if (line == null) return true;
 
         String trimmedLine = line.trim();
@@ -37,7 +35,7 @@ public final class LineParser {
                 return true;
 
             case "mark":
-                if (Helper.hasMissingArgs(parts, 2)){
+                if (Helper.isMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task number");
                 }
                 try {
@@ -50,7 +48,7 @@ public final class LineParser {
                 }
 
             case "unmark":
-                if (Helper.hasMissingArgs(parts, 2)){
+                if (Helper.isMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task number");
                 }
                 try {
@@ -65,20 +63,15 @@ public final class LineParser {
             case "todo":
             case "deadline":
             case "event":
-                if (Helper.hasMissingArgs(parts, 2)){
+                if (Helper.isMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task description");
                 }
-//                try {
-//                    actions.addToList(trimmedLine);
-//                } catch (BotException e) {
-//                    Helper.printFormattedReply(e.toString());
-//                }
                 actions.addToList(trimmedLine);
 
                 return true;
 
             case "delete":
-                if (Helper.hasMissingArgs(parts, 2)){
+                if (Helper.isMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task description");
                 }
                 try {

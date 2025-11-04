@@ -1,13 +1,10 @@
 package com.golden.core;
 
 import com.golden.config.StaticConfig;
-import com.golden.model.Deadline;
-import com.golden.model.Event;
-import com.golden.model.Task;
-import com.golden.model.Todo;
 import com.golden.util.Helper;
-import java.util.ArrayList;
+import com.golden.task.*;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
+import java.util.ArrayList;
 
 public class CustomList implements Iterable<Task> {
     //    private static Task[] taskList;

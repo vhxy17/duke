@@ -14,24 +14,19 @@ public class Golden {
     private final CustomList tasks;        //list belongs to the chatbot
     private Storage storage;
     private BotActions actions;
+    private Ui ui;
     // removed- decision to make LineParser a stateless, generic utility function
     //    private final LineParser parser = new LineParser();
 
-    private String getBotName(){
-        return botName;
-    }
-    private void greet() {
-        Helper.printFormattedReply(String.format("Hello! I'm  %s.\nWhat can I do for you?", getBotName()));
-    }
 
     public Golden(String filePath) throws BotException {
+        ui = new Ui();
         storage = new Storage(filePath);
         tasks = new CustomList(storage.loadFile());
         actions = new BotActions(tasks, storage);
     }
 
     public void run(){
-        greet();
         Scanner input = new Scanner(System.in);
         boolean running = true;
         while (running){

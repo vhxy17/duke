@@ -26,7 +26,7 @@ public final class Helper {         // 'final' is used to prevent a new Helper c
         }
         return true;
     }
-    public static boolean hasMissingArgs(String[] parts, int targetArgCount){
+    public static boolean isMissingArgs(String[] parts, int targetArgCount){
         return !(parts.length == targetArgCount);
     }
 }

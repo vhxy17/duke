@@ -1,10 +1,7 @@
 package com.golden.parser;
 
 import com.golden.exceptions.storageErrors.StorageFileParseException;
-import com.golden.model.Deadline;
-import com.golden.model.Event;
-import com.golden.model.Task;
-import com.golden.model.Todo;
+import com.golden.task.*;
 
 import java.util.Locale;
 

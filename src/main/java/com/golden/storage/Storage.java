@@ -8,9 +8,8 @@ package com.golden.storage;
 
 
 import com.golden.core.CustomList;
-import com.golden.model.Task;
-import com.golden.exceptions.storageErrors.StorageFileNotFoundException;
-import com.golden.exceptions.storageErrors.StorageFileParseException;
+import com.golden.task.Task;
+import com.golden.exceptions.storageErrors.*;
 import com.golden.parser.TaskParser;
 
 import java.io.BufferedWriter;

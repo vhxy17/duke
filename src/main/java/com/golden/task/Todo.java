@@ -1,4 +1,4 @@
-package com.golden.model;
+package com.golden.task;
 
 public class Todo extends Task{
 
