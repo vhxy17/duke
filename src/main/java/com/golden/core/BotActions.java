@@ -97,7 +97,8 @@ public class BotActions {
         String deletedTask = myList.getTask(listNumber).toString();
         try {
             myList.deleteTask(listNumber);
-        } catch (IllegalArgumentException e){
+            storage.writeToFile(myList);
+        } catch (IllegalArgumentException | StorageFormatException e){
             Helper.printFormattedReply(e.toString());
         }
         printDeletedItem(deletedTask);
