@@ -3,6 +3,7 @@ package com.golden.parser;
 import com.golden.core.BotActions;
 import com.golden.exceptions.*;
 import com.golden.exceptions.parseErrors.UnknownCommandException;
+import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.exceptions.validationErrors.MissingArgumentException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.util.Helper;
@@ -13,7 +14,8 @@ public final class LineParser {
     private LineParser(){}
 
     public static boolean parseInput(String line, BotActions actions) throws MissingArgumentException,
-            UnknownCommandException, IllegalArgumentException, IndexOutOfBoundsException {
+            UnknownCommandException, IllegalArgumentException, IndexOutOfBoundsException,
+            StorageFileParseException {
         if (line == null) return true;
 
         String trimmedLine = line.trim();
@@ -66,11 +68,12 @@ public final class LineParser {
                 if (Helper.hasMissingArgs(parts, 2)){
                     throw new MissingArgumentException("task description");
                 }
-                try {
-                    actions.addToList(trimmedLine);
-                } catch (BotException e) {
-                    Helper.printFormattedReply(e.toString());
-                }
+//                try {
+//                    actions.addToList(trimmedLine);
+//                } catch (BotException e) {
+//                    Helper.printFormattedReply(e.toString());
+//                }
+                actions.addToList(trimmedLine);
 
                 return true;
 

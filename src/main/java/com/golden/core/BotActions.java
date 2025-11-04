@@ -3,7 +3,7 @@ package com.golden.core;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import com.golden.exceptions.storageErrors.StorageFormatException;
+import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.storage.Storage;
 import com.golden.util.Helper;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
@@ -36,7 +36,7 @@ public class BotActions {
     }
 
     public void addToList(String trimmedString) throws IllegalArgumentException,
-            StorageFormatException {
+            StorageFileParseException {
                 String[] parts = trimmedString.split("\\s+", 2);
                 String taskType = parts[0].toLowerCase();    //leading whitespace already removed in previous step
                 String taskDescription = parts[1].toLowerCase();
@@ -93,14 +93,10 @@ public class BotActions {
             printMarkItem(listNumber, false);
     }
 
-    public void delete(int listNumber) throws IllegalArgumentException  {
+    public void delete(int listNumber) throws IllegalArgumentException, StorageFileParseException {
         String deletedTask = myList.getTask(listNumber).toString();
-        try {
-            myList.deleteTask(listNumber);
-            storage.writeToFile(myList);
-        } catch (IllegalArgumentException | StorageFormatException e){
-            Helper.printFormattedReply(e.toString());
-        }
+        myList.deleteTask(listNumber);
+        storage.writeToFile(myList);
         printDeletedItem(deletedTask);
     }
 }

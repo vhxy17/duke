@@ -10,9 +10,8 @@ package com.golden.storage;
 import com.golden.core.CustomList;
 import com.golden.model.Task;
 import com.golden.exceptions.storageErrors.StorageFileNotFoundException;
-import com.golden.exceptions.storageErrors.StorageFormatException;
+import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.parser.TaskParser;
-import com.golden.util.Helper;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -30,16 +29,15 @@ public class Storage {
         if (filepath == null || filepath.trim().isEmpty()){
             throw new StorageFileNotFoundException("Empty path!");
         }
-        File f = new File(filepath).getAbsoluteFile();
-        validateDirectory(f);   // only directory checks here
-        this.file = f;          // file may not exist yet (first run)
+        this.file = new File(filepath);
+        ensureDirectoryExistsOrCreate(file);   // note: file may not exist yet
     }
 
     /** Ensure parent directory exists (or create it), and is a directory & writable. */
-    private void validateDirectory(File file) throws StorageFileNotFoundException {
-        // validate parent directory first
-        File dir = file.getParentFile();
+    private void ensureDirectoryExistsOrCreate(File targetFile) throws StorageFileNotFoundException {
+        File dir = targetFile.getParentFile();
         if (dir == null) return;    // indicates filepath in current working directory
+
         if (!dir.exists()) {
             // try to create the directory tree for first run
             if (!dir.mkdirs()) {
@@ -53,24 +51,13 @@ public class Storage {
                 throw new StorageFileNotFoundException("Directory is not writable: " + dir.getPath());
             }
         }
-//        // validate file existence, type, permissions
-//        if (!file.exists()){
-//            throw new StorageFileNotFoundException("File not found: " + file.getPath() + ".");
-//        }
-//        if (!file.isFile()){
-//            throw new StorageFileNotFoundException("This is not a regular file: " + file.getPath());
-//        }
-//        if (!file.canRead()) {
-//            throw new StorageFileNotFoundException("File is not readable: " + file.getPath());
-//        }
-//        if (!file.canWrite()) {
-//            throw new StorageFileNotFoundException("File is not writable: " + file.getPath());
-//        }
     }
 
+    /** Ensure file exists (or create it), and is a file, is readable and writable. */
     private void ensureFileExistsOrCreate() throws StorageFileNotFoundException {
         try {
-            validateDirectory(file);
+            // validate directory exists first
+            ensureDirectoryExistsOrCreate(file);    //re-check in case directory got deleted
             if (!file.exists()) {
                 // create empty file on first run
                 if (!file.createNewFile()) {
@@ -86,27 +73,28 @@ public class Storage {
                 throw new StorageFileNotFoundException(
                         "File is not readable: " + file.getPath());
             }
-        } catch (StorageFileNotFoundException e) {
-            Helper.printFormattedReply(e.toString());
+            if (!file.canWrite()) {
+                throw new StorageFileNotFoundException(
+                        "File is not writable: " + file.getPath());
+            }
         } catch (java.io.IOException e){
             throw new StorageFileNotFoundException(
                 "I/O error ensuring file exists: " + file.getPath());
         }
-
-        // (Optional) if you’ll write later from this process, also check:
-        // if (!file.canWrite()) throw new StorageFileNotFoundException("File is not writable: " + file.getPath());
     }
 
     /**
      * Reads the Storage-object-bound file line-by-line and returns a list of parsed Task objects.
      * Wraps java.io.FileNotFoundException into StorageFileNotFoundException.
      */
-    public ArrayList<Task> loadFile() throws StorageFileNotFoundException {
+    public ArrayList<Task> loadFile() throws StorageFileNotFoundException,
+            StorageFileParseException {
         // Ensure folder & file exis; create empty file on first run
         ensureFileExistsOrCreate();
 
-        ArrayList<Task> tasks = new ArrayList<Task>();
+        final ArrayList<Task> tasks = new ArrayList<Task>();
         int lineNo = 0;
+
         try (Scanner scanner = new Scanner(file)){
             while (scanner.hasNextLine()){
                 String line = scanner.nextLine();
@@ -125,12 +113,10 @@ public class Storage {
             throw new StorageFileNotFoundException(
                     "Unable to open file: " + file.getPath()
             );
-        } catch (StorageFormatException e){
-            Helper.printFormattedReply(e.toString());
         }
         return tasks;
     }
-    public File writeToFile(CustomList tasklist) throws StorageFormatException {
+    public File writeToFile(CustomList tasklist) throws StorageFileParseException {
 
         // This will create the file on first run (if missing)
         try (FileWriter fw = new FileWriter(file, /* append */ false);
@@ -145,8 +131,8 @@ public class Storage {
             return file;
 
         } catch (IOException e) {
-            // If your project uses a checked StorageException, prefer rethrowing that.
-            throw new StorageFormatException("Failed to write tasks to: " + file.getPath());
+            // Rethrow/wrap as a checked StorageException
+            throw new StorageFileParseException("Failed to write tasks to: " + file.getPath());
         }
     }
 }
