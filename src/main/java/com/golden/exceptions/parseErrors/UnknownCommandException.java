@@ -1,6 +1,7 @@
-package Exceptions.ParseErrors;
+package com.golden.exceptions.parseErrors;
 
-import Exceptions.ParseException;
+
+import com.golden.exceptions.ParseException;
 
 public class UnknownCommandException extends ParseException {
     public UnknownCommandException(String cmd){

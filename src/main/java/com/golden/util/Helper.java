@@ -1,3 +1,5 @@
+package com.golden.util;
+
 public final class Helper {         // 'final' is used to prevent a new Helper class
     private static final String lineBreak =
             "---------------------------------------------------------------------------------------------------------";

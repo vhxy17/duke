@@ -1,14 +1,21 @@
+package com.golden.core;
+
+import java.util.ArrayList;
 import java.util.regex.Pattern;
-import Exceptions.ValidationErrors.IllegalArgumentException;
-import Exceptions.ValidationErrors.IndexOutOfBoundsException;
+
+import com.golden.exceptions.storageErrors.StorageFormatException;
+import com.golden.storage.Storage;
+import com.golden.util.Helper;
 
 public class BotActions {
     private final String botName;
-    private final CustomList myList;
+    CustomList myList;
+    Storage storage;
 
-    public BotActions(String name, CustomList list) {
+    public BotActions(String name, CustomList list, Storage storage) {
         this.botName = name;
         this.myList = list;
+        this.storage = storage;
     }
 
     private String getBotName() {
@@ -17,10 +24,6 @@ public class BotActions {
 
     private int getLastTaskNumber() {
         return myList.getSize();
-    }
-
-    public void greet() {
-        Helper.printFormattedReply(String.format("Hello! I'm  %s.\nWhat can I do for you?", getBotName()));
     }
 
     public void sayBye() {
@@ -37,31 +40,31 @@ public class BotActions {
                 + "\nNow you have " + myList.getSize() + " task(s) in the list.");
     }
 
-    public void addToList(String trimmedString) throws IllegalArgumentException {
-        String[] parts = trimmedString.split("\\s+", 2);
-        String taskType = parts[0].toLowerCase();    //leading whitespace already removed in previous step
-        String taskDescription = parts[1].toLowerCase();
+    public void addToList(String trimmedString) throws IllegalArgumentException,
+            StorageFormatException {
+                String[] parts = trimmedString.split("\\s+", 2);
+                String taskType = parts[0].toLowerCase();    //leading whitespace already removed in previous step
+                String taskDescription = parts[1].toLowerCase();
 
-        if (taskType.equalsIgnoreCase("todo")) {
-            myList.addTodo(taskDescription);
-            System.out.println("bp 1");
-            printAddedItem();
-        } else if (taskType.equalsIgnoreCase("deadline")) {
-            String[] partsOfDescription = Pattern.compile("(?i)\\Q/by\\E").split(taskDescription, 2);
-            String before = partsOfDescription[0];
-            String after = (partsOfDescription.length > 1) ? partsOfDescription[1] : "";
-            after = after.strip();
-            myList.addDeadline(before, after);
-            printAddedItem();
-        } else if (taskType.equalsIgnoreCase("event")) {
-            String[] partsOfDescription = Pattern.compile("(?i)\\Q/from\\E|\\Q/to\\E").split(taskDescription, 3);
-            String beforeFrom = partsOfDescription.length > 0 ? partsOfDescription[0].strip() : "";
-            String beforeTo = partsOfDescription.length > 1 ? partsOfDescription[1].strip() : "";
-            String afterTo = partsOfDescription.length > 2 ? partsOfDescription[2].strip() : "";
-            myList.addEvent(beforeFrom, beforeTo, afterTo);
-            printAddedItem();
-        }
+                if (taskType.equalsIgnoreCase("todo")) {
+                    myList.addTodo(taskDescription);
+                } else if (taskType.equalsIgnoreCase("deadline")) {
+                    String[] partsOfDescription = Pattern.compile("(?i)\\Q/by\\E").split(taskDescription, 2);
+                    String before = partsOfDescription[0];
+                    String after = (partsOfDescription.length > 1) ? partsOfDescription[1] : "";
+                    after = after.strip();
+                    myList.addDeadline(before, after);
+                } else if (taskType.equalsIgnoreCase("event")) {
+                    String[] partsOfDescription = Pattern.compile("(?i)\\Q/from\\E|\\Q/to\\E").split(taskDescription, 3);
+                    String beforeFrom = partsOfDescription.length > 0 ? partsOfDescription[0].strip() : "";
+                    String beforeTo = partsOfDescription.length > 1 ? partsOfDescription[1].strip() : "";
+                    String afterTo = partsOfDescription.length > 2 ? partsOfDescription[2].strip() : "";
+                    myList.addEvent(beforeFrom, beforeTo, afterTo);
+                }
+                printAddedItem();
+                storage.writeToFile(myList);
     }
+
 
     public void printList() {
         Helper.printFormattedReply(myList.getList());

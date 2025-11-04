@@ -1,6 +1,6 @@
-package Exceptions.ValidationErrors;
+package com.golden.exceptions.validationErrors;
 
-import Exceptions.ValidationException;
+import com.golden.exceptions.ValidationException;
 
 public class IllegalArgumentException extends ValidationException {
     public IllegalArgumentException(String what) {

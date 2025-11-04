@@ -1,4 +1,4 @@
-package Exceptions;
+package com.golden.exceptions;
 
 public class BotException extends Exception{
     private final ErrorCode code;
