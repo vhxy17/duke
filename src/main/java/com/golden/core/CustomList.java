@@ -3,7 +3,7 @@ package com.golden.core;
 import com.golden.config.StaticConfig;
 import com.golden.util.Helper;
 import com.golden.task.*;
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
+import com.golden.exceptions.parseErrors.IllegalArgumentException;
 import java.util.ArrayList;
 
 public class CustomList implements Iterable<Task> {

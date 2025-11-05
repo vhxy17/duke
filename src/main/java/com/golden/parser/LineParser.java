@@ -1,20 +1,17 @@
 package com.golden.parser;
 
-import com.golden.core.BotActions;
+import com.golden.commands.*;
+import com.golden.exceptions.BotException;
 import com.golden.util.Helper;
-import com.golden.exceptions.parseErrors.UnknownCommandException;
-import com.golden.exceptions.storageErrors.StorageFileParseException;
-import com.golden.exceptions.validationErrors.MissingArgumentException;
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
+import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.exceptions.parseErrors.*;
 
 public final class LineParser {
     // overrides default public constructor method and makes it private
     // blocks anyone outside the class from instantiating new LineParser()
     private LineParser(){}
 
-    public static boolean parseInput(String line, BotActions actions) throws MissingArgumentException,
-            IllegalArgumentException, UnknownCommandException, StorageFileParseException {
-        if (line == null) return true;
+    public static Command parseInput(String line) throws BotException {
 
         String trimmedLine = line.trim();
         if (trimmedLine.isEmpty()) {
@@ -23,69 +20,47 @@ public final class LineParser {
         }
 
         String[] parts = trimmedLine.split("\\s+", 2);
-        String command = parts[0].toLowerCase();
+        String command = parts[0].trim().toLowerCase();
+
         switch (command) {
             case "bye":
-                actions.sayBye();
-                return false;
+            case "goodbye":
+                return new ExitCommand();
 
             case "list":
-                // to update to load from file
-                actions.printList();
-                return true;
+                return new ListCommand();
 
             case "mark":
-                if (Helper.isMissingArgs(parts, 2)){
-                    throw new MissingArgumentException("task number");
-                }
-                try {
-                    int listNumber = Integer.parseInt(parts[1].trim());
-                    actions.mark(listNumber);
-                    return true;
-                } catch (NumberFormatException e) {
-                    String arg = parts[1].trim();
-                    throw new IllegalArgumentException(arg);
-                }
-
+                Helper.requireArgs(parts, 2, "task number");
+                return new MarkCommand(parseNumber(parts[1]));
             case "unmark":
-                if (Helper.isMissingArgs(parts, 2)){
-                    throw new MissingArgumentException("task number");
-                }
-                try {
-                    int listNumber = Integer.parseInt(parts[1].trim());
-                    actions.unmark(listNumber);
-                    return true;
-                } catch (NumberFormatException e) {
-                    String arg = parts[1].trim();
-                    throw new IllegalArgumentException(arg);
-                }
+                Helper.requireArgs(parts, 2, "task number");
+                return new UnmarkCommand(parseNumber(parts[1]));
+            case "delete":
+                Helper.requireArgs(parts, 2, "task number");
+                return new MarkCommand(parseNumber(parts[1]));
 
             case "todo":
             case "deadline":
             case "event":
-                if (Helper.isMissingArgs(parts, 2)){
-                    throw new MissingArgumentException("task description");
-                }
-                actions.addToList(trimmedLine);
+                Helper.requireArgs(parts, 2, "task description");
+                return new TodoCommand(trimmedLine);
 
-                return true;
-
-            case "delete":
-                if (Helper.isMissingArgs(parts, 2)){
-                    throw new MissingArgumentException("task description");
-                }
-                try {
-                    int listNumber = Integer.parseInt(parts[1].trim());
-                    actions.delete(listNumber);
-                    return true;
-                } catch (NumberFormatException e) {
-                    String arg = parts[1].trim();
-                    throw new IllegalArgumentException(arg);
-                }
             default:
-//                actions.echo(trimmedLine);
-//                return true;
                 throw new UnknownCommandException(command);
+        }
+    }
+
+    private static int parseNumber(String s) throws IllegalArgumentException {
+        String arg = s.trim();
+        try {
+            int number = Integer.parseInt(arg);
+            if (number <= 0) {
+                throw new NumberFormatException();
+            }
+            return number;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(arg);
         }
     }
 

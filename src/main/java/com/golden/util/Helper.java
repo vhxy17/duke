@@ -1,5 +1,8 @@
 package com.golden.util;
 
+import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.exceptions.parseErrors.MissingArgumentException;
+
 public final class Helper {         // 'final' is used to prevent a new Helper class
     private static final String lineBreak =
             "---------------------------------------------------------------------------------------------------------";
@@ -28,5 +31,14 @@ public final class Helper {         // 'final' is used to prevent a new Helper c
     }
     public static boolean isMissingArgs(String[] parts, int targetArgCount){
         return !(parts.length == targetArgCount);
+    }
+    public static void requireArgs(String[] parts, int n, String what) throws MissingArgumentException,
+            IllegalArgumentException {
+        if (parts.length < n || parts[1].trim().isEmpty()) {
+            throw new MissingArgumentException(what);
+        }
+        else if (parts.length > n) {
+            throw new IllegalArgumentException(parts[n]);
+        }
     }
 }

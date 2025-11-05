@@ -37,7 +37,7 @@ public class Event extends Task{
     }
     @Override
     public String toString() {
-        return String.format("[%c][%c] %s (from: %s to: %s)", renderTypeTag(),
+        return String.format("\t[%c][%c] %s (from: %s to: %s)", renderTypeTag(),
                 renderStatusCharacter(), getTaskDescription(), getStartDate(), getEndDate());
     }
 }

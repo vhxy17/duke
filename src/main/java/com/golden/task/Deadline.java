@@ -28,6 +28,6 @@ public class Deadline extends Task{
     }
     @Override
     public String toString() {
-        return String.format("[%c][%c] %s (by: %s)", renderTypeTag(), renderStatusCharacter(), getTaskDescription(), getEndDate());
+        return String.format("\t[%c][%c] %s (by: %s)", renderTypeTag(), renderStatusCharacter(), getTaskDescription(), getEndDate());
     }
 }

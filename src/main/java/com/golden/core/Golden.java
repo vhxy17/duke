@@ -1,5 +1,6 @@
 package com.golden.core;
 
+import com.golden.commands.Command;
 import com.golden.config.StaticConfig;
 import com.golden.exceptions.BotException;
 import com.golden.parser.LineParser;
@@ -27,14 +28,19 @@ public class Golden {
     }
 
     public void run(){
-        Scanner input = new Scanner(System.in);
-        boolean running = true;
-        while (running){
-            String line = input.nextLine();
+        ui.greet();
+//        Scanner input = new Scanner(System.in);
+        boolean isExit = false;
+        while (!isExit){
             try {
-                running = LineParser.parseInput(line, actions);
+//            String line = input.nextLine();
+                String fullCommand = ui.readCommand();
+//                running = LineParser.parseInput(fullCommand, actions);
+                Command c = LineParser.parseInput(fullCommand);
+                c.execute(actions);
+                isExit = c.isExit();
             } catch (BotException e){
-                Helper.printFormattedReply(e.toString());
+                ui.showError(e.toString());
             }
         }
     }

@@ -3,14 +3,27 @@ package com.golden.core;
 import com.golden.config.StaticConfig;
 import com.golden.util.Helper;
 
+import java.util.Scanner;
+
 public class Ui {
+
+    public Ui(){
+    }
+
     private String getBotName(){
         return StaticConfig.APP_NAME;
     }
-    private void greet() {
+
+    public void greet() {
         Helper.printFormattedReply(String.format("Hello! I'm  %s.\nWhat can I do for you?", getBotName()));
     }
-    public Ui(){
-        greet();
+
+    public String readCommand() {
+        Scanner input = new Scanner(System.in);
+        return input.nextLine();
+    }
+
+    public void showError(String errorMsg){
+        Helper.printFormattedReply(errorMsg);
     }
 }

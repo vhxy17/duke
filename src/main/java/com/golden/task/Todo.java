@@ -19,6 +19,6 @@ public class Todo extends Task{
     }
     @Override
     public String toString(){
-        return String.format("[%c][%c] %s", renderTypeTag(), renderStatusCharacter(), getTaskDescription());
+        return String.format("\t[%c][%c] %s", renderTypeTag(), renderStatusCharacter(), getTaskDescription());
     }
 }

@@ -1,11 +1,10 @@
 package com.golden.core;
 
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import com.golden.storage.Storage;
 import com.golden.util.Helper;
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
+import com.golden.exceptions.parseErrors.IllegalArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 
 public class BotActions {
@@ -78,7 +77,7 @@ public class BotActions {
     }
     public void printDeletedItem(String taskDescription) {
         String message = "Done! I have removed this task:\n";
-        message += "\t\t" + taskDescription;
+        message += taskDescription;
         message += "\nYou have " + myList.getSize() + " tasks in the list.";
         Helper.printFormattedReply(message);
     }

@@ -24,18 +24,25 @@ public class Storage {
     // final keyword used here to bind a storage instance to one filepath for its lifetime
     private final File file;
 
+    /** EAGER policy: ensure that target file exists now than later
+     *  Rationale: project requirement states to load data from hard disk **when chatbot starts up**
+     *  therefore, decision to ensure file can be created in constructor method of Storage class
+     */
     public Storage(String filepath) throws StorageFileNotFoundException {
         if (filepath == null || filepath.trim().isEmpty()){
             throw new StorageFileNotFoundException("Empty path!");
         }
-        this.file = new File(filepath);
-        ensureDirectoryExistsOrCreate(file);   // note: file may not exist yet
+        File f = new File(filepath).getAbsoluteFile();
+        ensureDirectoryExistsOrCreate(f);
+        this.file = f;
+        ensureFileExistsOrCreate(this.file);    //immediately throw error if file cannot be created
     }
 
-    /** Ensure parent directory exists (or create it), and is a directory & writable. */
+    /** Helper method: Ensure parent directory exists, is a directory and is writable. */
     private void ensureDirectoryExistsOrCreate(File targetFile) throws StorageFileNotFoundException {
         File dir = targetFile.getParentFile();
-        if (dir == null) return;    // indicates filepath in current working directory
+        if (dir == null)
+            return;    // indicates filepath in current working directory
 
         if (!dir.exists()) {
             // try to create the directory tree for first run
@@ -43,20 +50,20 @@ public class Storage {
                 throw new StorageFileNotFoundException(
                         "Directory does not exist and could not be created: " + dir.getPath());
             }
-            if (!dir.isDirectory()) {
+        }
+        if (!dir.isDirectory()) {
                 throw new StorageFileNotFoundException("This is not a directory: " + dir.getPath());
             }
-            if (!dir.canWrite()) {
-                throw new StorageFileNotFoundException("Directory is not writable: " + dir.getPath());
-            }
+        if (!dir.canWrite()) {
+            throw new StorageFileNotFoundException("Directory is not writable: " + dir.getPath());
         }
     }
 
-    /** Ensure file exists (or create it), and is a file, is readable and writable. */
-    private void ensureFileExistsOrCreate() throws StorageFileNotFoundException {
+    /** Helper method: Ensure file object exists, is a file, is readable and writable. */
+    private void ensureFileExistsOrCreate(File f) throws StorageFileNotFoundException {
         try {
             // validate directory exists first
-            ensureDirectoryExistsOrCreate(file);    //re-check in case directory got deleted
+            ensureDirectoryExistsOrCreate(f);    //re-check directory in case it got deleted
             if (!file.exists()) {
                 // create empty file on first run
                 if (!file.createNewFile()) {
@@ -89,9 +96,9 @@ public class Storage {
     public ArrayList<Task> loadFile() throws StorageFileNotFoundException,
             StorageFileParseException {
         // Ensure folder & file exis; create empty file on first run
-        ensureFileExistsOrCreate();
+        ensureFileExistsOrCreate(this.file);
 
-        final ArrayList<Task> tasks = new ArrayList<Task>();
+        final ArrayList<Task> tasks = new ArrayList<>();
         int lineNo = 0;
 
         try (Scanner scanner = new Scanner(file)){
@@ -115,7 +122,9 @@ public class Storage {
         }
         return tasks;
     }
-    public File writeToFile(CustomList tasklist) throws StorageFileParseException {
+
+    public File writeToFile(CustomList tasklist) throws StorageFileParseException{
+//        ensureDirectoryExistsOrCreate(this.file);
 
         // This will create the file on first run (if missing)
         try (FileWriter fw = new FileWriter(file, /* append */ false);
