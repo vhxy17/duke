@@ -3,12 +3,12 @@ package com.golden.util;
 import com.golden.exceptions.parseErrors.IllegalArgumentException;
 import com.golden.exceptions.parseErrors.MissingArgumentException;
 
-public final class Helper {         // 'final' is used to prevent a new Helper class
+public final class FormatHelper {         // 'final' is used to prevent a new Helper class
     private static final String lineBreak =
             "---------------------------------------------------------------------------------------------------------";
 
     // override default public constructor method and makes it private; prevents instantiation by other classes
-    private Helper(){}
+    private FormatHelper(){}
 
     // Static utility methods means no need to create a Helper object, can be called directly: e.g. Helper.printReply(string)
     private static String addIndentation(String s){
@@ -22,23 +22,5 @@ public final class Helper {         // 'final' is used to prevent a new Helper c
     }
     public static void printFormattedReply(String rawReply){
         System.out.println(formatReply(rawReply));
-    }
-    public static boolean isNumberInRange(int lowerLimit, int upperLimit, int number ){
-        if (number < lowerLimit || number > upperLimit){
-            return false;
-        }
-        return true;
-    }
-    public static boolean isMissingArgs(String[] parts, int targetArgCount){
-        return !(parts.length == targetArgCount);
-    }
-    public static void requireArgs(String[] parts, int n, String what) throws MissingArgumentException,
-            IllegalArgumentException {
-        if (parts.length < n || parts[1].trim().isEmpty()) {
-            throw new MissingArgumentException(what);
-        }
-        else if (parts.length > n) {
-            throw new IllegalArgumentException(parts[n]);
-        }
     }
 }

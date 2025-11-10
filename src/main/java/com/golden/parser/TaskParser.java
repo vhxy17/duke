@@ -1,7 +1,10 @@
 package com.golden.parser;
 
+import com.golden.exceptions.ParseException;
+import com.golden.exceptions.parseErrors.MissingArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.task.*;
+import com.golden.util.ParseHelper;
 
 import java.util.Locale;
 
@@ -66,5 +69,19 @@ public class TaskParser {
             default:
                 throw new StorageFileParseException("Line " + lineNo + ": unknown task type '" + type + "'. Expected T, D, or E.");
         }
+    }
+
+    public static String[] parseDeadlineCommand(String rawArgs) throws ParseException,
+            MissingArgumentException {
+        String[] deadlineArgs = ParseHelper.splitOnSlashSections(rawArgs.trim());
+        ParseHelper.requireArgs(deadlineArgs, 2, "task description or /by");
+        return deadlineArgs;
+    }
+
+    public static String[] parseEventCommand(String rawArgs) throws ParseException,
+            MissingArgumentException {
+        String[] eventArgs = ParseHelper.splitOnSlashSections(rawArgs.trim());
+        ParseHelper.requireArgs(eventArgs, 3, "task description or /from or /to");
+        return eventArgs;
     }
 }

@@ -13,7 +13,7 @@ public class TodoCommand extends Command {
     @Override
     protected CommandResult doExecute(BotActions actions)
             throws BotException {
-        actions.addToList(args);
+        actions.addTodo(args);
         CommandResult result = new CommandResult(false);
         return result;
     }

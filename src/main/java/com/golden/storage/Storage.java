@@ -7,6 +7,7 @@ package com.golden.storage;
  */
 
 
+import com.golden.config.StaticConfig;
 import com.golden.core.CustomList;
 import com.golden.task.Task;
 import com.golden.exceptions.storageErrors.*;
@@ -24,17 +25,21 @@ public class Storage {
     // final keyword used here to bind a storage instance to one filepath for its lifetime
     private final File file;
 
+    private String getFilepath(){
+        return StaticConfig.INIT_FILEPATH;
+    }
     /** EAGER policy: ensure that target file exists now than later
      *  Rationale: project requirement states to load data from hard disk **when chatbot starts up**
      *  therefore, decision to ensure file can be created in constructor method of Storage class
      */
-    public Storage(String filepath) throws StorageFileNotFoundException {
+    public Storage() throws StorageFileNotFoundException {
+        String filepath = getFilepath();
         if (filepath == null || filepath.trim().isEmpty()){
-            throw new StorageFileNotFoundException("Empty path!");
+            throw new StorageFileNotFoundException("Empty path provided in initial configuration!");
         }
         File f = new File(filepath).getAbsoluteFile();
         ensureDirectoryExistsOrCreate(f);
-        this.file = f;
+        this.file = f;      // only reference to file is created at this moment
         ensureFileExistsOrCreate(this.file);    //immediately throw error if file cannot be created
     }
 
@@ -45,7 +50,7 @@ public class Storage {
             return;    // indicates filepath in current working directory
 
         if (!dir.exists()) {
-            // try to create the directory tree for first run
+            // if directory doesn't exist, try to create the directory tree for first run
             if (!dir.mkdirs()) {
                 throw new StorageFileNotFoundException(
                         "Directory does not exist and could not be created: " + dir.getPath());
@@ -55,7 +60,7 @@ public class Storage {
                 throw new StorageFileNotFoundException("This is not a directory: " + dir.getPath());
             }
         if (!dir.canWrite()) {
-            throw new StorageFileNotFoundException("Directory is not writable: " + dir.getPath());
+            throw new StorageFileNotFoundException("This directory is not writable: " + dir.getPath());
         }
     }
 
@@ -95,7 +100,7 @@ public class Storage {
      */
     public ArrayList<Task> loadFile() throws StorageFileNotFoundException,
             StorageFileParseException {
-        // Ensure folder & file exis; create empty file on first run
+        // Ensure folder & file exis; otherwise, create empty file on first run
         ensureFileExistsOrCreate(this.file);
 
         final ArrayList<Task> tasks = new ArrayList<>();

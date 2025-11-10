@@ -1,21 +1,21 @@
 package com.golden.core;
 
 import com.golden.config.StaticConfig;
-import com.golden.util.Helper;
+import com.golden.util.FormatHelper;
 
 import java.util.Scanner;
 
 public class Ui {
 
-    public Ui(){
-    }
+    public Ui(){ }
 
     private String getBotName(){
         return StaticConfig.APP_NAME;
     }
 
     public void greet() {
-        Helper.printFormattedReply(String.format("Hello! I'm  %s.\nWhat can I do for you?", getBotName()));
+        FormatHelper.printFormattedReply(String.format(
+                "Hello! I'm  %s.\nWhat can I do for you?", getBotName()));
     }
 
     public String readCommand() {
@@ -24,6 +24,10 @@ public class Ui {
     }
 
     public void showError(String errorMsg){
-        Helper.printFormattedReply(errorMsg);
+        FormatHelper.printFormattedReply(errorMsg);
+    }
+
+    protected void printBotReply(String replyString){
+        FormatHelper.printFormattedReply(replyString);
     }
 }

@@ -7,10 +7,7 @@ import com.golden.exceptions.parseErrors.IllegalArgumentException;
 public class DeleteCommand extends Command {
     private final int number;
 
-    public DeleteCommand(int number) throws IllegalArgumentException {
-        if (number == 0){
-            throw new IllegalArgumentException("0 is not a valid task number!");
-        }
+    public DeleteCommand(int number) {
         this.number = number;
     }
 

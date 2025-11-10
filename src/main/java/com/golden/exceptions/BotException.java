@@ -23,7 +23,7 @@ public class BotException extends Exception{
         if (detail == null || detail.isBlank()) {
             return base;
         }
-        // Add a separator only if the base doesn't already end suitably
+        // Add a separator only if the base message doesn't already end suitably
         char last = base.charAt(base.length() - 1);
         boolean endsWithPunct = last == '.' || last == '!' || last == '?';
         return endsWithPunct ? (base + " " + detail) : (base + ": " + detail);

@@ -5,7 +5,7 @@ import com.golden.exceptions.ParseException;
 
 public class UnknownCommandException extends ParseException {
     public UnknownCommandException(String cmd){
-        super(cmd);
+        super("Unknown command: " + cmd + ".");
     }
 
 }

@@ -1,9 +1,13 @@
 package com.golden.core;
 
 import com.golden.config.StaticConfig;
-import com.golden.util.Helper;
+import com.golden.exceptions.BotException;
+import com.golden.exceptions.ErrorCode;
+import com.golden.util.FormatHelper;
 import com.golden.task.*;
 import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.util.ValidationHelper;
+
 import java.util.ArrayList;
 
 public class CustomList implements Iterable<Task> {
@@ -13,8 +17,6 @@ public class CustomList implements Iterable<Task> {
     private static int listSize;
 
     public CustomList(ArrayList<Task> tasks){
-        // instantiate an array with a preset max task limit
-        //        taskList = new Task[StaticConfig.MAX_TASKS];
         this.taskList = (tasks == null) ? new ArrayList<>() : tasks;
     }
     protected int getSize(){
@@ -53,25 +55,18 @@ public class CustomList implements Iterable<Task> {
         return message;
     }
     protected void markTask(int taskNumber, boolean isMark) throws IllegalArgumentException {
+        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
-        if (Helper.isNumberInRange(1, taskList.size(), taskNumber)){
-            taskList.get(taskIndex).setIsDone(isMark);
-        } else {
-            throw new IllegalArgumentException("Number out of range");
-        }
+        taskList.get(taskIndex).setIsDone(isMark);
     }
     protected Task getTask(int taskNumber) throws IllegalArgumentException {
+        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
-        if (!Helper.isNumberInRange(1, taskList.size(), taskNumber)) {
-            throw new IllegalArgumentException("Number out of range");
-        }
         return taskList.get(taskIndex);
     }
     protected void deleteTask(int taskNumber) throws IllegalArgumentException {
+        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
-        if (!Helper.isNumberInRange(1, taskList.size(), taskNumber)) {
-            throw new IllegalArgumentException("Number out of range");
-        }
         taskList.remove(taskIndex);
     }
     @Override

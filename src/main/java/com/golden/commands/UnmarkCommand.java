@@ -8,9 +8,6 @@ public class UnmarkCommand extends Command {
     private final int number;
 
     public UnmarkCommand(int number) throws IllegalArgumentException {
-        if (number == 0){
-            throw new IllegalArgumentException("0 is not a valid task number!");
-        }
         this.number = number;
     }
 
