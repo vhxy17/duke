@@ -11,7 +11,7 @@ public class TaskNumberParser {
     public static int parseNumber(String s) throws BotException {
         String arg = s.trim();
         String[] markArgParts = ParseHelper.splitOnWhitespaces(arg);
-        ParseHelper.requireArgs(markArgParts, 1, "task number");
+        ParseHelper.requireArgs(markArgParts, 1, "\n Try '[command] [task number]'");
 
         try {
             int number = Integer.parseInt(arg);
