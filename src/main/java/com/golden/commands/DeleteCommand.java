@@ -2,7 +2,6 @@ package com.golden.commands;
 
 import com.golden.core.BotActions;
 import com.golden.exceptions.BotException;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
 
 public class DeleteCommand extends Command {
     private final int number;

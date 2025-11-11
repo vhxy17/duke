@@ -1,24 +1,21 @@
 package com.golden.commands;
 
 import com.golden.core.BotActions;
-import com.golden.core.CustomList;
-import com.golden.core.Ui;
 import com.golden.exceptions.BotException;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
-import com.golden.storage.Storage;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public abstract class Command {
-    private final boolean isExit;
+    private final boolean isGoodbye;
 
     protected Command(){
-        this.isExit = false;
+        this.isGoodbye = false;
     }
     protected Command(boolean isExit){
-        this.isExit = isExit;
+        this.isGoodbye = isExit;
     }
 
     public boolean isExit(){
-        return this.isExit;
+        return this.isGoodbye;
     }
 
     public final CommandResult execute(BotActions actions) throws BotException {
@@ -30,19 +27,18 @@ public abstract class Command {
 
     protected boolean validateTaskDescription(String description) throws IllegalArgumentException {
         if (description.isBlank()){
-            throw new IllegalArgumentException("Empty input. (Expected: Task Description)");
+            throw new IllegalArgumentException("empty input. \nPlease provide a task description.");
         }
         return true;
     }
     protected boolean validatePrefixArgs(String string, String prefix) throws IllegalArgumentException{
         if (!string.startsWith(prefix)){
-            throw new IllegalArgumentException(string + ". (expected: '" + prefix +" ...')");
+            throw new IllegalArgumentException(string + ". " +
+                    "\n Please enter '" + prefix +" ...'");
         }
         return true;
     }
     protected String extractArgFromPrefix(String string, String prefix) {
         return string.trim().substring(prefix.length());
-//        validFrom = this.fromString.trim().substring("/from ".length());
-//        validTo = this.toString.trim().substring("/to ".length());
     }
 }

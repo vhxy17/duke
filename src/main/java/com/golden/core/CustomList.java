@@ -1,13 +1,11 @@
 package com.golden.core;
 
 import com.golden.config.StaticConfig;
-import com.golden.exceptions.BotException;
-import com.golden.exceptions.ErrorCode;
-import com.golden.util.FormatHelper;
 import com.golden.task.*;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.util.ValidationHelper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class CustomList implements Iterable<Task> {
@@ -22,7 +20,7 @@ public class CustomList implements Iterable<Task> {
     protected int getSize(){
         return taskList.size();
     }
-    protected void addTask(Task task){
+    private void addTask(Task task){
         // checks tasklist capacity before adding new task
         if (taskList.size() < StaticConfig.MAX_TASKS) {
             taskList.add(task);
@@ -30,13 +28,13 @@ public class CustomList implements Iterable<Task> {
             System.out.println("List is full!");
         }
     }
-    public void addTodo(String taskDescription){
+    protected void addTodo(String taskDescription){
         addTask(new Todo(taskDescription));
     }
-    public void addDeadline(String taskDescription, String endDate){
+    protected void addDeadline(String taskDescription, LocalDate endDate){
         addTask(new Deadline(taskDescription, endDate));
     }
-    public void addEvent(String taskDescription, String startDate, String endDate){
+    protected void addEvent(String taskDescription, LocalDate startDate, LocalDate endDate){
         addTask(new Event(taskDescription, startDate, endDate));
     }
     protected String getList() {

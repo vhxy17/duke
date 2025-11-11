@@ -1,10 +1,10 @@
 package com.golden.util;
 
-import com.golden.exceptions.BotException;
 import com.golden.exceptions.ParseException;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
 import com.golden.exceptions.parseErrors.MissingArgumentException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,19 +19,24 @@ public class ParseHelper {
 
     private ParseHelper(){}
 
+    /** Check the given (String) array for the exact number of parts required.
+     *
+     *  @return {@code Throwable} errors if the required number of arguments is flouted  */
     public static void requireArgs(String[] parts, int n, String what) throws ParseException {
         if (parts == null) {
             throw new ParseException(String.format("%s expected (no arguments provided).", what));
         }
         if (parts.length > n){
-            throw new ParseException(String.format("too many arguments. Only %d argument(s) expected. %s", n, what));
+            throw new ParseException(String.format("too many arguments. %s", what));
         }
         if (parts.length < n) {
             throw new MissingArgumentException( what + " is missing!!");
         }
     }
 
-    /** Split on any whitespace (spaces, tabs, newlines), collapsing runs. */
+    /** Parse the String input and split on any whitespace (spaces, tabs, newlines), collapsing runs.
+     *
+     *  @return an array of String(s) of this {@code Throwable} instance (which may be {@code null}).  */
     public static String[] splitOnWhitespaces(String input) throws MissingArgumentException {
         if (input == null || input.isBlank()){
             throw new MissingArgumentException("Expected some input!");
@@ -40,11 +45,13 @@ public class ParseHelper {
     }
 
     /**
-     * Split input into:
+     * Parse the String input and split on:
      *  [0]: leading text before any "/section"
      *  [1..]: each "/section" including the leading slash, e.g. "/from monday"
      *
-     * If no "/section" is found, returns a single-element array [trimmedInput].
+     *  If no "/section" is found, returns a single-element array.
+     *
+     *  @return an array of String(s) of this {@code Throwable} instance (which may be {@code null}).
      */
     public static String[] splitOnSlashSections(String input) throws MissingArgumentException {
         if (input == null) {
@@ -82,5 +89,30 @@ public class ParseHelper {
         }
 
         return out.toArray(new String[0]);
+    }
+
+    /** Returns trimmed line that is non-null and not blank;
+     * @return the trimmed string of this {@code Throwable} instance (which may be {@code null}).
+     * */
+    public static String isNonBlank(String s, String message) throws MissingArgumentException {
+        if (s == null || s.trim().isEmpty()) {
+            throw new MissingArgumentException(message);
+        }
+        return s.trim();
+    }
+
+    /** Convert the String input into a {@code LocalDate} object.
+     *
+     *  @return a {@code LocalDate} object of this {@code Throwable} instance (which may be {@code null}).  */
+    public static LocalDate convertStringToDate (String dateString) throws ParseException {
+        if (ValidationHelper.isValidIsoDate(dateString)){
+            try {
+                return LocalDate.parse(dateString);
+            } catch (DateTimeParseException e) {
+                throw new ParseException(dateString);
+            }
+        } else
+            throw new ParseException(String.format(
+                    "'%s'. \nPlease enter a valid date in this format: yyyy-MM-dd.", dateString));
     }
 }

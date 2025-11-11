@@ -2,7 +2,7 @@ package com.golden.commands;
 
 import com.golden.core.BotActions;
 import com.golden.exceptions.BotException;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class UnmarkCommand extends Command {
     private final int number;

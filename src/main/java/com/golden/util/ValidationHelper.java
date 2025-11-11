@@ -1,26 +1,55 @@
 package com.golden.util;
 
-import com.golden.exceptions.BotException;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
-import com.golden.exceptions.parseErrors.MissingArgumentException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ValidationHelper {
     // override default public constructor method and makes it private; prevents instantiation by other classes
     private ValidationHelper(){}
 
+    /** Returns True if given number is non-null and not blank, and in between lower limit
+     *  and upper limit is non-null and not blank;
+     *
+     *  @return boolean value of this {@code Throwable} instance (which may be {@code null}).
+     * */
     public static boolean isNumberInRange(int lowerLimit, int upperLimit, int number )
             throws IllegalArgumentException {
         if (number < lowerLimit || number > upperLimit){
-            throw new IllegalArgumentException(String.format("%d. Number is out of range", number));
+            throw new IllegalArgumentException(String.format("'%d'. Number is out of range.", number));
         }
         return true;
     }
-    /** Ensures line is non-null and not blank; returns trimmed line. */
-    public static String isNonBlank(String s, String message) throws MissingArgumentException {
-        if (s == null || s.trim().isEmpty()) {
-            throw new MissingArgumentException(message);
+
+    /** Returns True if date String is non-null, not blank and a valid date observing yyyy-MM-dd format.
+     *
+     *  @return boolean value of this {@code Throwable} instance (which may be {@code null}).
+     * */
+    public static boolean isValidIsoDate(String dateString) {
+        if (dateString == null || dateString.isBlank()){
+            return false;
         }
-        return s.trim();
+        try {
+            // ISO_LOCAL_DATE expects exactly yyyy-MM-dd format
+            LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
+    /** Checks that the order of the two {@code LocalDate} objects given is valid.
+     *
+     *  @return a {@code Throwable} instance when the order of the dates is flouted.
+     * */
+    public static void validateDateOrder(LocalDate before, LocalDate after) throws IllegalArgumentException {
+        if (before.isAfter(after)){
+            throw new IllegalArgumentException(String.format(
+                    "'%s' is NOT before '%s'!!",
+                    FormatHelper.displayAsMMMdyyyy(before), FormatHelper.displayAsMMMdyyyy(after)
+            ));
+        }
+    }
 }
