@@ -9,6 +9,7 @@ package com.golden.storage;
 
 import com.golden.config.StaticConfig;
 import com.golden.core.CustomList;
+import com.golden.exceptions.BotException;
 import com.golden.task.Task;
 import com.golden.exceptions.storageErrors.*;
 import com.golden.parser.TaskParser;
@@ -43,7 +44,9 @@ public class Storage {
         ensureFileExistsOrCreate(this.file);    //immediately throw error if file cannot be created
     }
 
-    /** Helper method: Ensure parent directory exists, is a directory and is writable. */
+    /**
+     * Private class helper method to ensure parent directory exists, is a directory and is writable.
+     */
     private void ensureDirectoryExistsOrCreate(File targetFile) throws StorageFileNotFoundException {
         File dir = targetFile.getParentFile();
         if (dir == null)
@@ -64,7 +67,9 @@ public class Storage {
         }
     }
 
-    /** Helper method: Ensure file object exists, is a file, is readable and writable. */
+    /**
+     * Private class helper method to ensure file object exists, is a file, is readable and writable.
+     */
     private void ensureFileExistsOrCreate(File f) throws StorageFileNotFoundException {
         try {
             // validate directory exists first
@@ -95,10 +100,12 @@ public class Storage {
     }
 
     /**
-     * Reads the Storage-object-bound file line-by-line and returns a list of parsed Task objects.
-     * Wraps java.io.FileNotFoundException into StorageFileNotFoundException.
+     *  Returns an array of Tasks after parsing the Storage-bound file line-by-line.
+     *
+     * @return  an ArrayList of Task objects of this {@code Throwable} instance (which may
+     *          read an empty or non-existence file).
      */
-    public ArrayList<Task> loadFile() throws StorageFileNotFoundException,
+    public ArrayList<Task> loadFile() throws BotException,
             StorageFileParseException {
         // Ensure folder & file exis; otherwise, create empty file on first run
         ensureFileExistsOrCreate(this.file);
@@ -119,8 +126,8 @@ public class Storage {
                     tasks.add(t);
                 }
             }
-        } catch (java.io.FileNotFoundException e) {
-            // wrap JDK FileNotFoundException in custom Storage..Exception
+        }catch (java.io.FileNotFoundException e) {
+            // Rethrow (i.e. wrap) FileNotFoundException as a custom checked 'Storage..Exception'
             throw new StorageFileNotFoundException(
                     "Unable to open file: " + file.getPath()
             );
@@ -128,6 +135,13 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     *  Returns a File that records the list of tasks stored in the 'tasklist' object.
+     *
+     * @param   tasklist The CustomList of Task objects bound to this app instance.
+     *
+     * @return  a File that saves the current state of Tasks or a {@code Throwable} instance.
+     */
     public File writeToFile(CustomList tasklist) throws StorageFileParseException{
 //        ensureDirectoryExistsOrCreate(this.file);
 
@@ -144,7 +158,7 @@ public class Storage {
             return file;
 
         } catch (IOException e) {
-            // Rethrow/wrap as a checked StorageException
+            // Rethrow (i.e. wrap) as a checked StorageException
             throw new StorageFileParseException("Failed to write tasks to: " + file.getPath());
         }
     }

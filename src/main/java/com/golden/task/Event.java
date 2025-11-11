@@ -1,29 +1,33 @@
 package com.golden.task;
 
-public class Event extends Task{
-    String startDate;
-    String endDate;
+import com.golden.util.FormatHelper;
 
-    public Event(String description, String from, String to){
+import java.time.LocalDate;
+
+public class Event extends Task{
+    LocalDate startDate;
+    LocalDate endDate;
+
+    public Event(String description, LocalDate from, LocalDate to){
         super(description);
         this.startDate = from;
         this.endDate = to;
     }
-    public Event(String description, boolean isDone, String from, String to){
+    public Event(String description, boolean isDone, LocalDate from, LocalDate to){
         super(description, isDone);
         this.startDate = from;
         this.endDate = to;
     }
 
-    protected void setStartDate(String start){
+    protected void setStartDate(LocalDate start){
         this.startDate = start;
     }
 
-    protected String getStartDate(){
-        return startDate;
+    protected LocalDate getStartDate(){
+        return this.startDate;
     }
-    protected String getEndDate(){
-        return endDate;
+    protected LocalDate getEndDate(){
+        return this.endDate;
     }
 
     @Override
@@ -38,6 +42,7 @@ public class Event extends Task{
     @Override
     public String toString() {
         return String.format("\t[%c][%c] %s (from: %s to: %s)", renderTypeTag(),
-                renderStatusCharacter(), getTaskDescription(), getStartDate(), getEndDate());
+                renderStatusCharacter(), getTaskDescription(),
+                FormatHelper.displayAsMMMdyyyy(getStartDate()), FormatHelper.displayAsMMMdyyyy(getEndDate()));
     }
 }

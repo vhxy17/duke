@@ -22,16 +22,19 @@ public class Golden {
         actions = new BotActions(tasks, storage, ui);
     }
 
+    /**
+     *  The logic to start up the chatbot, when and how to interact with the UI, and when to end the process.
+     */
     public void run(){
         ui.greet();
 //        Scanner input = new Scanner(System.in);
-        boolean isExit = false;
-        while (!isExit){
+        boolean isGoodbye = false;
+        while (!isGoodbye){
             try {
                 String fullCommand = ui.readCommand();
                 Command c = CommandParser.parseCommand(fullCommand);
                 c.execute(actions);
-                isExit = c.isExit();
+                isGoodbye = c.isExit();
             } catch (BotException e){
                 ui.showError(e.toString());
             }

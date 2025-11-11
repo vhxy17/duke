@@ -1,12 +1,10 @@
 package com.golden.core;
 
-import java.util.regex.Pattern;
-
 import com.golden.exceptions.BotException;
 import com.golden.storage.Storage;
-import com.golden.util.FormatHelper;
-import com.golden.exceptions.parseErrors.IllegalArgumentException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
+import java.time.LocalDate;
 
 public class BotActions {
     CustomList myList;
@@ -78,12 +76,12 @@ public class BotActions {
         displayAddedItem();
     }
 
-    public void addDeadline(String task, String deadlineBy) throws BotException {
+    public void addDeadline(String task, LocalDate deadlineBy) throws BotException {
         myList.addDeadline(task, deadlineBy);
         storage.writeToFile(myList);
         displayAddedItem();
     }
-    public void addEvent(String task, String eventFrom, String eventTo) throws BotException {
+    public void addEvent(String task, LocalDate eventFrom, LocalDate eventTo) throws BotException {
         myList.addEvent(task, eventFrom, eventTo);
         storage.writeToFile(myList);
         displayAddedItem();

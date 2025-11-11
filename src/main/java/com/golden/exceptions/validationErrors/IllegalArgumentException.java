@@ -1,4 +1,4 @@
-package com.golden.exceptions.parseErrors;
+package com.golden.exceptions.validationErrors;
 
 import com.golden.exceptions.ValidationException;
 
