@@ -22,7 +22,7 @@ public abstract class Task {
         this.isDone = isDone;
         this.priority = (priority == null) ? Priority.LOW : priority;
     }
-    protected String getTaskDescription() {
+    public String getTaskDescription() {
         return this.description;
     }
 //    protected boolean validateTaskDescription(String description) throws IllegalArgumentException {

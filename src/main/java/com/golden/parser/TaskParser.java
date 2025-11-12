@@ -107,7 +107,7 @@ public class TaskParser {
         }
     }
 
-    /** Parses a String and returns its parts: '[String before /by]' and '[String from /by]'.
+    /** Parses a String and returns its parts: '[String before /by]' and '[String from /by]', '[String from /priority]'.
      *
      * @return  a String array or a {@code Throwable} Exception.
      *  */
@@ -117,7 +117,8 @@ public class TaskParser {
         return deadlineArgs;
     }
 
-    /** Parses a String and returns its parts: '[String before /from]', '[String from /from], and '[String from /to]'.
+    /** Parses a String and returns its parts: '[String before /from]', '[String from /from],
+     * '[String from /to], '[String from /priority]'.
      *
      * @return  a String array or a {@code Throwable} Exception.
      *  */
@@ -127,6 +128,10 @@ public class TaskParser {
         return eventArgs;
     }
 
+    /** Parses a String and returns its parts: '[String before /priority]' and '[String from /priority]'.
+     *
+     * @return  a String array or a {@code Throwable} Exception.
+     *  */
     public static String[] parseTodoCommand(String rawArgs) throws ParseException{
         String[] todoArgs = ParseHelper.splitOnSlashSections(rawArgs.trim());
         ParseHelper.requireArgs(todoArgs, 2, "task description or priority");

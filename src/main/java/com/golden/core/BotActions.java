@@ -5,8 +5,11 @@ import com.golden.storage.Storage;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.task.Priority;
+import com.golden.task.Task;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BotActions {
     CustomList myList;
@@ -81,5 +84,9 @@ public class BotActions {
 
     public void saveTaskList() throws StorageFileParseException {
         storage.writeToFile(myList);
+    }
+
+    public List<Task> searchTasks(String searchParams){
+        return myList.findByKeyword(searchParams);
     }
 }

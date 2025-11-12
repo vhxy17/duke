@@ -7,6 +7,7 @@ import com.golden.util.ValidationHelper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomList implements Iterable<Task> {
     //    private static Task[] taskList;
@@ -72,4 +73,25 @@ public class CustomList implements Iterable<Task> {
     public java.util.Iterator<Task> iterator() {
         return taskList.iterator();
     }
+
+    public List<Task> findByKeyword(String keyword){
+        List<Task> matches = new ArrayList<>();
+        if (keyword == null || keyword.trim().isBlank()){
+            return matches;
+        }
+
+        final String normalisedStr = keyword.toLowerCase();
+
+        for (Task t : this){
+            if (t == null){
+                continue;
+            }
+            String desc = t.getTaskDescription();
+            if (desc != null && desc.toLowerCase().contains(normalisedStr)){
+                matches.add(t);
+            }
+        }
+        return matches;
+    }
+
 }

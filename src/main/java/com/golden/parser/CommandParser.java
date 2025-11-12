@@ -53,7 +53,6 @@ public final class CommandParser {
                 } catch (ArrayIndexOutOfBoundsException e){
                     throw new MissingArgumentException("task number is missing!");
                 }
-
             case "delete":
                 try{
                     return new DeleteCommand(TaskNumberParser.parseNumber(parts[1].trim()));
@@ -64,8 +63,9 @@ public final class CommandParser {
             case "todo":
                 // guard against case where only 'todo' is passed without any task description.
                 ParseHelper.requireArgs(parts, 2, "task description");
+                // handle if parts[1] is null in parseTodoCommand
                 String[] todoArgs = TaskParser.parseTodoCommand(parts[1].trim());
-                return new TodoCommand(todoArgs);    //handle if parts[1] is null before reaching here
+                return new TodoCommand(todoArgs);
             case "deadline":
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] deadlineArgs = TaskParser.parseDeadlineCommand(parts[1].trim());
@@ -74,6 +74,10 @@ public final class CommandParser {
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] eventArgs = TaskParser.parseEventCommand(parts[1].trim());
                 return new EventCommand(eventArgs);
+
+            case "find":
+                ParseHelper.requireArgs(parts, 2, "search details");
+                return new FindCommand(parts[1].trim());
 
             default:
                 throw new UnknownCommandException(command);

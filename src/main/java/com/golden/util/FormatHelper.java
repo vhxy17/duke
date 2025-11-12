@@ -1,7 +1,10 @@
 package com.golden.util;
 
+import com.golden.task.Task;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public final class FormatHelper {         // 'final' is used to prevent a new Helper class
     private static final String lineBreak =
@@ -51,5 +54,18 @@ public final class FormatHelper {         // 'final' is used to prevent a new He
             throw new IllegalArgumentException("date must not be null.");
         }
         return dateObj.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
+    }
+    public static String renderTaskListToString(List<Task> matches) {
+        StringBuilder taskString = new StringBuilder();
+        if (matches.isEmpty()) {
+            return "I'm sorry, no matches found.";
+        } else {
+            for (int i = 0; i < matches.size(); i++) {
+                taskString.append(i+1).append(".")
+                    .append(matches.get(i).toString())
+                    .append('\n');
+            }
+        }
+        return taskString.toString();
     }
 }
