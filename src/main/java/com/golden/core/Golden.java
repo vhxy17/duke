@@ -1,7 +1,6 @@
 package com.golden.core;
 
 import com.golden.commands.Command;
-import com.golden.config.StaticConfig;
 import com.golden.exceptions.BotException;
 import com.golden.parser.CommandParser;
 import com.golden.storage.Storage;
@@ -12,14 +11,14 @@ public class Golden {
     private final CustomList tasks;        //list belongs to the chatbot
     private Storage storage;
     private BotActions actions;
-    private Ui ui;
+    private static Ui ui;
 
 
     public Golden() throws BotException {
         ui = new Ui();
         storage = new Storage();
-        tasks = new CustomList(storage.loadFile());
-        actions = new BotActions(tasks, storage, ui);
+        tasks = new CustomList(storage.loadFile());     //error on loadFile
+        actions = new BotActions(tasks, storage);
     }
 
     /**
@@ -33,8 +32,8 @@ public class Golden {
             try {
                 String fullCommand = ui.readCommand();
                 Command c = CommandParser.parseCommand(fullCommand);
-                c.execute(actions);
-                isGoodbye = c.isExit();
+                c.execute(actions, ui);
+                isGoodbye = c.isGoodbye();
             } catch (BotException e){
                 ui.showError(e.toString());
             }
@@ -45,7 +44,7 @@ public class Golden {
         try {
             new Golden().run();
         } catch (BotException e) {
-            FormatHelper.printFormattedReply(e.toString());
+            ui.showError(e.toString());
         }
     }
 }

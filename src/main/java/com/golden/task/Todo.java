@@ -1,12 +1,18 @@
 package com.golden.task;
 
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
+
 public class Todo extends Task{
 
-    public Todo(String description) {
+    public Todo(String description, Priority priority) {
         super(description);
+        setPriority(priority);
     }
     public Todo(String description, boolean isDone) {
         super(description, isDone);
+    }
+    public Todo(String description, boolean isDone, Priority priority) {
+        super(description, isDone, priority);
     }
 
     @Override
@@ -15,10 +21,12 @@ public class Todo extends Task{
     }
     @Override
     public String serialise(){
-        return String.format("%c | %c | %s", renderTypeTag(), renderStatusDigit(), getTaskDescription());
+        return String.format("%c | %c | %s | %s", renderTypeTag(), renderStatusDigit(),
+                getTaskDescription(), toPriorityString(getPriority()));
     }
     @Override
     public String toString(){
-        return String.format("\t[%c][%c] %s", renderTypeTag(), renderStatusCharacter(), getTaskDescription());
+        return String.format("\t[%c][%c] %s (%s)", renderTypeTag(), renderStatusCharacter(),
+                getTaskDescription(), toPriorityString(getPriority()));
     }
 }

@@ -1,20 +1,21 @@
 package com.golden.commands;
 
 import com.golden.core.BotActions;
+import com.golden.core.Ui;
 import com.golden.exceptions.BotException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class DeleteCommand extends Command {
-    private final int number;
+    private final int taskNumber;
 
-    public DeleteCommand(int number) {
-        this.number = number;
+    public DeleteCommand(int taskNumber) {
+        this.taskNumber = taskNumber;
     }
 
     @Override
-    protected CommandResult doExecute(BotActions actions)
-            throws BotException {
-        actions.delete(number);
-        CommandResult result = new CommandResult(false);
-        return result;
+    public void execute(BotActions actions, Ui ui) throws IllegalArgumentException {
+        String taskToBeDeleted = actions.getTaskString(taskNumber);
+        actions.delete(taskNumber);
+        ui.printBotReply(actions.constructDeletedTaskMsg(taskToBeDeleted));
     }
 }

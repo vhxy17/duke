@@ -28,14 +28,15 @@ public class CustomList implements Iterable<Task> {
             System.out.println("List is full!");
         }
     }
-    protected void addTodo(String taskDescription){
-        addTask(new Todo(taskDescription));
+    protected void addTodo(String taskDescription, Priority priority) throws IllegalArgumentException {
+        addTask(new Todo(taskDescription, priority));
     }
-    protected void addDeadline(String taskDescription, LocalDate endDate){
-        addTask(new Deadline(taskDescription, endDate));
+    protected void addDeadline(String taskDescription, LocalDate endDate, Priority priority) throws IllegalArgumentException {
+        addTask(new Deadline(taskDescription, endDate, priority));
     }
-    protected void addEvent(String taskDescription, LocalDate startDate, LocalDate endDate){
-        addTask(new Event(taskDescription, startDate, endDate));
+    protected void addEvent(String taskDescription, LocalDate startDate,
+                            LocalDate endDate, Priority priority) throws IllegalArgumentException {
+        addTask(new Event(taskDescription, startDate, endDate, priority));
     }
     protected String getList() {
         if (taskList.isEmpty()){

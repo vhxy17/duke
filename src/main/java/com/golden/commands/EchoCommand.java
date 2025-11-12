@@ -1,15 +1,19 @@
 package com.golden.commands;
 
+
 import com.golden.core.BotActions;
 import com.golden.core.Ui;
 import com.golden.exceptions.BotException;
 
-public class ListCommand extends Command{
-    public ListCommand(){
+public class EchoCommand extends Command {
+    private final String echoLine;
+
+    public EchoCommand(String commandString){
+        this.echoLine = commandString;
     }
 
     @Override
     public void execute(BotActions actions, Ui ui) {
-        ui.printBotReply(actions.listTasks());
+        ui.printBotReply(echoLine);
     }
 }

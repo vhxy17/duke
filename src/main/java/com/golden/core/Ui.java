@@ -46,7 +46,7 @@ public class Ui {
      *
      * @return the formatted output of the reply string given.
      */
-    protected void printBotReply(String replyString){
+    public void printBotReply(String replyString){
         FormatHelper.printFormattedReply(replyString);
     }
 }

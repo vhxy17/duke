@@ -4,93 +4,82 @@ import com.golden.exceptions.BotException;
 import com.golden.storage.Storage;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
+import com.golden.task.Priority;
+
 import java.time.LocalDate;
 
 public class BotActions {
     CustomList myList;
     Storage storage;
-    Ui ui;
 
-    public BotActions(CustomList list, Storage storage, Ui ui) {
+    public BotActions(CustomList list, Storage storage) {
         this.myList = list;
         this.storage = storage;
-        this.ui = ui;
     }
 
     private int getLastTaskNumber() {
         return myList.getSize();
     }
 
-    public void sayBye() {
-        ui.printBotReply("Goodbye! See you soon!");
+    public String listTasks() {
+        return myList.getList();
     }
 
-    public void echo(String s) {
-        ui.printBotReply(s);
-    }
-
-    public void printList() {
-        ui.printBotReply(myList.getList());
-    }
-
-    private void displayAddedItem() throws IllegalArgumentException {
+    public String constructAddTaskMsg() throws IllegalArgumentException {
         String message = "Got it. I've added this task:\n"
-                + myList.getTask(getLastTaskNumber()).toString()
+                + getTaskString(getLastTaskNumber())
                 + "\nNow you have " + myList.getSize() + " task(s) in the list.";
-
-        ui.printBotReply(message);
+        return message;
     }
 
-    public void displayMarkItem(int number, boolean isMark) throws IllegalArgumentException {
+    public String constructMarkItemMsg(int taskNumber, boolean isMark) throws IllegalArgumentException {
+        String message;
         if (isMark) {
-            String message = "Nice! I have marked this task as done:\n";
-            message += myList.getTask(number);
-            ui.printBotReply(message);
+            message = "Nice! I have marked this task as done:\n";
+            message += getTaskString(taskNumber);
         } else {
-            String message = "OK, I've marked this task as not done yet:\n";
-            message += myList.getTask(number);
-            ui.printBotReply(message);
+            message = "OK, I've marked this task as not done yet:\n";
+            message += getTaskString(taskNumber);
         }
+        return message;
     }
 
-    public void displayDeletedItem(String taskDescription) {
+    public void mark(int taskNumber) throws IllegalArgumentException {
+        myList.markTask(taskNumber, true);
+    }
+
+    public void unmark(int taskNumber) throws IllegalArgumentException  {
+        myList.markTask(taskNumber, false);
+    }
+
+    public void addTodo(String task, Priority priority) throws BotException {
+        myList.addTodo(task, priority);
+    }
+
+    public void addDeadline(String task, LocalDate deadlineBy, Priority priority) throws BotException {
+        myList.addDeadline(task, deadlineBy, priority);
+    }
+    public void addEvent(String task, LocalDate eventFrom, LocalDate eventTo, Priority priority)
+            throws BotException {
+        myList.addEvent(task, eventFrom, eventTo, priority);
+    }
+
+    public void delete(int taskNumber) throws IllegalArgumentException {
+        myList.deleteTask(taskNumber);
+    }
+
+    public String constructDeletedTaskMsg(String toDeleteTask) {
         String message = "Done! I have removed this task:\n";
-        message += taskDescription;
+        message += toDeleteTask;
         message += "\nYou have: " + myList.getSize() + " pending tasks.";
-        ui.printBotReply(message);
+        return message;
     }
 
-    public void mark(int listNumber) throws IllegalArgumentException {
-        myList.markTask(listNumber, true);
-        displayMarkItem(listNumber, true);
+    public String getTaskString(int taskNumber) throws IllegalArgumentException {
+        return myList.getTask(taskNumber).toString();
     }
 
-    public void unmark(int listNumber) throws IllegalArgumentException  {
-        myList.markTask(listNumber, false);
-        displayMarkItem(listNumber, false);
-    }
-
-    public void addTodo(String args) throws BotException {
-        myList.addTodo(args);
+    public void saveTaskList() throws StorageFileParseException {
         storage.writeToFile(myList);
-        displayAddedItem();
-    }
-
-    public void addDeadline(String task, LocalDate deadlineBy) throws BotException {
-        myList.addDeadline(task, deadlineBy);
-        storage.writeToFile(myList);
-        displayAddedItem();
-    }
-    public void addEvent(String task, LocalDate eventFrom, LocalDate eventTo) throws BotException {
-        myList.addEvent(task, eventFrom, eventTo);
-        storage.writeToFile(myList);
-        displayAddedItem();
-    }
-
-    public void delete(int listNumber) throws IllegalArgumentException, StorageFileParseException {
-        String deletedTask = myList.getTask(listNumber).toString();
-        myList.deleteTask(listNumber);
-        storage.writeToFile(myList);
-        displayDeletedItem(deletedTask);
     }
 }

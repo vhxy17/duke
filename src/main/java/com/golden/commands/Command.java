@@ -1,6 +1,7 @@
 package com.golden.commands;
 
 import com.golden.core.BotActions;
+import com.golden.core.Ui;
 import com.golden.exceptions.BotException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
@@ -10,20 +11,15 @@ public abstract class Command {
     protected Command(){
         this.isGoodbye = false;
     }
-    protected Command(boolean isExit){
-        this.isGoodbye = isExit;
+    protected Command(boolean isGoodbye){
+        this.isGoodbye = isGoodbye;
     }
 
-    public boolean isExit(){
+    public boolean isGoodbye(){
         return this.isGoodbye;
     }
 
-    public final CommandResult execute(BotActions actions) throws BotException {
-        CommandResult result = doExecute(actions);
-        return result;
-    }
-    protected abstract CommandResult doExecute(BotActions actions)
-            throws BotException;
+    public abstract void execute(BotActions actions, Ui ui) throws BotException;
 
     protected boolean validateTaskDescription(String description) throws IllegalArgumentException {
         if (description.isBlank()){
@@ -31,6 +27,14 @@ public abstract class Command {
         }
         return true;
     }
+
+    /**
+     * Checks that the prefix is contained within the String input.
+     * @param string The input to check against.
+     * @param prefix The prefix that is part of the required structure.
+     * @return True if prefix is found at the head of the input.
+     * @throws IllegalArgumentException
+     */
     protected boolean validatePrefixArgs(String string, String prefix) throws IllegalArgumentException{
         if (!string.startsWith(prefix)){
             throw new IllegalArgumentException(string + ". " +

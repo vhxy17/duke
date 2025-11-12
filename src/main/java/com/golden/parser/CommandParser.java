@@ -26,6 +26,10 @@ public final class CommandParser {
         final String command = parts[0].trim().toLowerCase();
 
         switch (command) {
+            case "hello":
+            case "hi":
+                return new EchoCommand(command);
+
             case "bye":
             case "goodbye":
                 // check no arguments is passed in after command; suggest corrective actions.
@@ -60,7 +64,8 @@ public final class CommandParser {
             case "todo":
                 // guard against case where only 'todo' is passed without any task description.
                 ParseHelper.requireArgs(parts, 2, "task description");
-                return new TodoCommand(parts[1].trim());    //handle if parts[1] is null before reaching here
+                String[] todoArgs = TaskParser.parseTodoCommand(parts[1].trim());
+                return new TodoCommand(todoArgs);    //handle if parts[1] is null before reaching here
             case "deadline":
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] deadlineArgs = TaskParser.parseDeadlineCommand(parts[1].trim());
@@ -81,5 +86,5 @@ public final class CommandParser {
 * 1. checks for specific keyword- e.g. /by, /from /to                   //done
 * 2. check for empty strings after /by, /from, /to                      //done
 * 3. catch ArrayIndexOutOfBoundsException from todo/deadline/event      //done
-* 4. 'todo 2025-11-11' causes error- UnsupportedTemporalTypeException. catch
+* 4. 'todo 2025-11-11' causes error- UnsupportedTemporalTypeException. // done
 * */

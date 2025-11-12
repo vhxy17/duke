@@ -20,8 +20,7 @@ public class TaskNumberParser {
         ParseHelper.requireArgs(markArgParts, 1, "\nPlease provide one task number.");
 
         try {
-            int number = Integer.parseInt(arg);
-            return number;
+            return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(String.format("'%s'.\nPlease provide a valid task number.", arg));
         }

@@ -1,21 +1,20 @@
 package com.golden.commands;
 
 import com.golden.core.BotActions;
+import com.golden.core.Ui;
 import com.golden.exceptions.BotException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class UnmarkCommand extends Command {
-    private final int number;
+    private final int taskNumber;
 
-    public UnmarkCommand(int number) throws IllegalArgumentException {
-        this.number = number;
+    public UnmarkCommand(int taskNumber) throws IllegalArgumentException {
+        this.taskNumber = taskNumber;
     }
 
     @Override
-    protected CommandResult doExecute(BotActions actions)
-            throws BotException {
-        actions.unmark(number);
-        CommandResult result = new CommandResult(false);
-        return result;
+    public void execute(BotActions actions, Ui ui) throws IllegalArgumentException {
+        actions.unmark(taskNumber);
+        ui.printBotReply(actions.constructMarkItemMsg(taskNumber, false));
     }
 }

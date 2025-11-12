@@ -105,8 +105,7 @@ public class Storage {
      * @return  an ArrayList of Task objects of this {@code Throwable} instance (which may
      *          read an empty or non-existence file).
      */
-    public ArrayList<Task> loadFile() throws BotException,
-            StorageFileParseException {
+    public ArrayList<Task> loadFile() throws BotException {
         // Ensure folder & file exis; otherwise, create empty file on first run
         ensureFileExistsOrCreate(this.file);
 
@@ -125,12 +124,15 @@ public class Storage {
                 if (t != null){
                     tasks.add(t);
                 }
+
             }
-        }catch (java.io.FileNotFoundException e) {
+        } catch (java.io.FileNotFoundException e) {
             // Rethrow (i.e. wrap) FileNotFoundException as a custom checked 'Storage..Exception'
             throw new StorageFileNotFoundException(
                     "Unable to open file: " + file.getPath()
             );
+        } catch (BotException e ){
+            System.out.println(e.toString());
         }
         return tasks;
     }
@@ -143,9 +145,6 @@ public class Storage {
      * @return  a File that saves the current state of Tasks or a {@code Throwable} instance.
      */
     public File writeToFile(CustomList tasklist) throws StorageFileParseException{
-//        ensureDirectoryExistsOrCreate(this.file);
-
-        // This will create the file on first run (if missing)
         try (FileWriter fw = new FileWriter(file, /* append */ false);
              BufferedWriter bw = new BufferedWriter(fw)) {
 

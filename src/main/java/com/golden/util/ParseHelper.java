@@ -1,7 +1,9 @@
 package com.golden.util;
 
+import com.golden.exceptions.BotException;
 import com.golden.exceptions.ParseException;
 import com.golden.exceptions.parseErrors.MissingArgumentException;
+import com.golden.task.Priority;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -115,4 +117,21 @@ public class ParseHelper {
             throw new ParseException(String.format(
                     "'%s'. \nPlease enter a valid date in this format: yyyy-MM-dd.", dateString));
     }
+
+    public static Priority convertStringToPriority(String priorityString) throws BotException {
+        String normalisedPriority;
+        if (priorityString == null || priorityString.isBlank()) {
+            throw new MissingArgumentException("priority cannot be null.");
+        }
+        normalisedPriority = priorityString.trim().toUpperCase();
+
+        for (Priority p : Priority.values()){
+            if (p.name().equals(normalisedPriority)){
+                return p;
+            }
+        }
+        throw new IllegalArgumentException(String.format(
+                "invalid priority: '%s'.", priorityString));
+    }
+
 }
