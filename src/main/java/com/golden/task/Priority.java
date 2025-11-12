@@ -1,9 +1,9 @@
 package com.golden.task;
 
 public enum Priority {
-    HIGH(3),
-    MEDIUM(2),
-    LOW(1);
+    HIGH(30),
+    MEDIUM(20),
+    LOW(10);
 
     private final int weight;
     Priority(int weight){
