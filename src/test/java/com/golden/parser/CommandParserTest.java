@@ -5,9 +5,6 @@ import com.golden.exceptions.BotException;
 import com.golden.exceptions.ParseException;
 import com.golden.exceptions.parseErrors.MissingArgumentException;
 import com.golden.exceptions.parseErrors.UnknownCommandException;
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
-import com.golden.util.FormatHelper;
-import com.golden.util.ValidationHelper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

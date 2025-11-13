@@ -2,7 +2,6 @@ package com.golden.commands;
 
 import com.golden.core.BotActions;
 import com.golden.core.Ui;
-import com.golden.exceptions.BotException;
 
 public class ListCommand extends Command{
     public ListCommand(){

@@ -118,6 +118,9 @@ public class ParseHelper {
                     "'%s'. \nPlease enter a valid future date in this format: yyyy-MM-dd.", dateString));
     }
 
+    /** Convert the String input into a validated {@code Priority} enum object.
+     *
+     *  @return a {@code Priority} object of this {@code Throwable} instance (which may be {@code null}).  */
     public static Priority convertStringToPriority(String priorityString) throws BotException {
         String normalisedPriority;
         if (priorityString == null || priorityString.isBlank()) {

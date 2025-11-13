@@ -1,12 +1,16 @@
 package com.golden.parser;
 
+import com.golden.task.Task;
+import com.golden.task.Todo;
+import com.golden.task.Deadline;
+import com.golden.task.Event;
+import com.golden.task.Priority;
+import com.golden.util.ParseHelper;
+import com.golden.util.ValidationHelper;
 import com.golden.exceptions.BotException;
 import com.golden.exceptions.ParseException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
-import com.golden.task.*;
-import com.golden.util.ParseHelper;
-import com.golden.util.ValidationHelper;
 
 import java.time.LocalDate;
 import java.util.Locale;
@@ -14,7 +18,7 @@ import java.util.Locale;
 public class TaskParser {
     private TaskParser(){}
 
-    private static boolean toDone(String doneStr, int lineNo) throws StorageFileParseException {
+    private static boolean isDone(String doneStr, int lineNo) throws StorageFileParseException {
         if ("1".equals(doneStr)) {
             return true;
         }
@@ -52,7 +56,7 @@ public class TaskParser {
         String desc = parts[2].trim();
         String priorityString = parts[parts.length - 1];
         Priority priority = ParseHelper.convertStringToPriority(priorityString);
-        boolean isDone = toDone(doneStr, lineNo);
+        boolean isDone = isDone(doneStr, lineNo);
 
         if (desc.isEmpty()) {
             throw new StorageFileParseException(String.format(

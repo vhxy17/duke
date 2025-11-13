@@ -2,7 +2,6 @@ package com.golden.commands;
 
 import com.golden.core.BotActions;
 import com.golden.core.Ui;
-import com.golden.exceptions.BotException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 
 public class DeleteCommand extends Command {

@@ -4,7 +4,6 @@ import com.golden.commands.Command;
 import com.golden.exceptions.BotException;
 import com.golden.parser.CommandParser;
 import com.golden.storage.Storage;
-import com.golden.util.FormatHelper;
 
 // Golden == ChatBot
 public class Golden {

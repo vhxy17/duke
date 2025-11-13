@@ -6,7 +6,6 @@ import com.golden.exceptions.BotException;
 import com.golden.task.Task;
 import com.golden.util.FormatHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FindCommand extends Command {

@@ -3,7 +3,6 @@ package com.golden.commands;
 
 import com.golden.core.BotActions;
 import com.golden.core.Ui;
-import com.golden.exceptions.BotException;
 
 public class EchoCommand extends Command {
     private final String echoLine;

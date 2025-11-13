@@ -1,9 +1,20 @@
 package com.golden.parser;
 
-import com.golden.commands.*;
+import com.golden.commands.Command;
+import com.golden.commands.TodoCommand;
+import com.golden.commands.DeadlineCommand;
+import com.golden.commands.EventCommand;
+import com.golden.commands.ListCommand;
+import com.golden.commands.ExitCommand;
+import com.golden.commands.EchoCommand;
+import com.golden.commands.MarkCommand;
+import com.golden.commands.UnmarkCommand;
+import com.golden.commands.DeleteCommand;
+import com.golden.commands.FindCommand;
 import com.golden.exceptions.BotException;
-import com.golden.exceptions.parseErrors.*;
-import com.golden.util.*;
+import com.golden.exceptions.parseErrors.MissingArgumentException;
+import com.golden.exceptions.parseErrors.UnknownCommandException;
+import com.golden.util.ParseHelper;
 
 public final class CommandParser {
     // overrides default public constructor method and makes it private
@@ -29,18 +40,15 @@ public final class CommandParser {
             case "hello":
             case "hi":
                 return new EchoCommand(command);
-
             case "bye":
             case "goodbye":
                 // check no arguments is passed in after command; suggest corrective actions.
                 ParseHelper.requireArgs(parts, 1, "Try 'bye' or 'goodbye'.");
                 return new ExitCommand();
-
             case "list":
                 // check no arguments is passed in after command; suggest corrective actions.
                 ParseHelper.requireArgs(parts, 1, "Try 'list'.");
                 return new ListCommand();
-
             case "mark":
                 try{
                     return new MarkCommand(TaskNumberParser.parseNumber(parts[1].trim()));
@@ -59,7 +67,6 @@ public final class CommandParser {
                 } catch (ArrayIndexOutOfBoundsException e){
                     throw new MissingArgumentException("task number is missing!");
                 }
-
             case "todo":
                 // guard against case where only 'todo' is passed without any following args.
                 ParseHelper.requireArgs(parts, 2, "task description");
@@ -75,11 +82,9 @@ public final class CommandParser {
                 String[] eventArgs = TaskParser.parseEventCommand(parts[1].trim());
 //                printArray(eventArgs);
                 return new EventCommand(eventArgs);
-
             case "find":
                 ParseHelper.requireArgs(parts, 2, "search details");
                 return new FindCommand(parts[1].trim());
-
             default:
                 throw new UnknownCommandException(command);
         }
