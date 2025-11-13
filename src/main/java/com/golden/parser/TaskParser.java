@@ -2,7 +2,6 @@ package com.golden.parser;
 
 import com.golden.exceptions.BotException;
 import com.golden.exceptions.ParseException;
-import com.golden.exceptions.parseErrors.MissingArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.task.*;

@@ -37,12 +37,11 @@ public abstract class Command {
      */
     protected boolean validatePrefixArgs(String string, String prefix) throws IllegalArgumentException{
         if (!string.startsWith(prefix)){
-            throw new IllegalArgumentException(string + ". " +
-                    "\n Please enter '" + prefix +" ...'");
+            throw new IllegalArgumentException(String.format("'%s'. \n Please enter: '%s...'", string, prefix));
         }
         return true;
     }
     protected String extractArgFromPrefix(String string, String prefix) {
-        return string.trim().substring(prefix.length());
+        return string.trim().substring(prefix.length()).trim();
     }
 }

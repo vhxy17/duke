@@ -61,7 +61,7 @@ public final class CommandParser {
                 }
 
             case "todo":
-                // guard against case where only 'todo' is passed without any task description.
+                // guard against case where only 'todo' is passed without any following args.
                 ParseHelper.requireArgs(parts, 2, "task description");
                 // handle if parts[1] is null in parseTodoCommand
                 String[] todoArgs = TaskParser.parseTodoCommand(parts[1].trim());
@@ -73,6 +73,7 @@ public final class CommandParser {
             case "event":
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] eventArgs = TaskParser.parseEventCommand(parts[1].trim());
+//                printArray(eventArgs);
                 return new EventCommand(eventArgs);
 
             case "find":
@@ -83,7 +84,13 @@ public final class CommandParser {
                 throw new UnknownCommandException(command);
         }
     }
+
+
+    private static void printArray(String[] arr) {
+        System.out.println(java.util.Arrays.toString(arr));
+    }
 }
+
 
 /*
 * unhandled exceptions:

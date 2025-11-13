@@ -115,7 +115,7 @@ public class ParseHelper {
             }
         } else
             throw new ParseException(String.format(
-                    "'%s'. \nPlease enter a valid date in this format: yyyy-MM-dd.", dateString));
+                    "'%s'. \nPlease enter a valid future date in this format: yyyy-MM-dd.", dateString));
     }
 
     public static Priority convertStringToPriority(String priorityString) throws BotException {

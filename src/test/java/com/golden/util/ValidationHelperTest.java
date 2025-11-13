@@ -2,11 +2,11 @@ package com.golden.util;
 
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.Month;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ValidationHelperTest {
 //    @Test
@@ -36,63 +36,68 @@ public class ValidationHelperTest {
     @Test
     public void isValidIsoDate_success() {
         // valid date in yyyy-MM-dd format
-        assertEquals(true, ValidationHelper.isValidIsoDate("2025-11-11"));
+        assertEquals(true, ValidationHelper.isValidIsoDate("2026-11-11"));
 
         // leap year date in yyyy-MM-dd format
-        assertEquals(true, ValidationHelper.isValidIsoDate("2024-02-29"));
+        assertEquals(true, ValidationHelper.isValidIsoDate("2028-02-29"));
     }
 
     @Test
     public void isValidIsoDate_failure() {
         // valid date in wrong format
-        assertEquals(false, ValidationHelper.isValidIsoDate("11-11-2025"));
+        assertEquals(false, ValidationHelper.isValidIsoDate("11-11-2026"));
 
         // valid date in wrong format v2
-        assertEquals(false, ValidationHelper.isValidIsoDate("2025-Nov-11"));
+        assertEquals(false, ValidationHelper.isValidIsoDate("2026-Nov-11"));
 
         // invalid date in correct format
-        assertEquals(false, ValidationHelper.isValidIsoDate("2025-13-11"));
+        assertEquals(false, ValidationHelper.isValidIsoDate("2026-13-11"));
 
         // invalid date - leap year day in wrong year
-        assertEquals(false, ValidationHelper.isValidIsoDate("2025-02-29"));
+        assertEquals(false, ValidationHelper.isValidIsoDate("2026-02-29"));
     }
 
     @Test
-    public void validateDateOrder_success() throws IllegalArgumentException {
-        LocalDate _11Nov2025 = LocalDate.of(2025, Month.NOVEMBER, 11);
-        LocalDate _12Nov2025 = LocalDate.of(2025, Month.NOVEMBER, 12);
-        LocalDate _01Jan2026 = LocalDate.of(2026, Month.JANUARY, 1);
+    public void validateDateOrder_success() {
+        LocalDate _11Nov2026 = LocalDate.of(2026, Month.NOVEMBER, 11);
+        LocalDate _12Nov2026 = LocalDate.of(2026, Month.NOVEMBER, 12);
+        LocalDate _01Jan2027 = LocalDate.of(2027, Month.JANUARY, 1);
         // valid date order within same year
         assertDoesNotThrow(() ->
-                ValidationHelper.validateDateOrder(_11Nov2025, _12Nov2025)
+                ValidationHelper.validateDateOrder(_11Nov2026, _12Nov2026)
         );
         // valid date order across two years
         assertDoesNotThrow(() ->
-                ValidationHelper.validateDateOrder(_12Nov2025, _01Jan2026)
+                ValidationHelper.validateDateOrder(_12Nov2026, _01Jan2027)
         );
     }
 
     @Test
     public void validateDateOrder_exceptionThrown() {
-        LocalDate _11Nov2025 = LocalDate.of(2025, Month.NOVEMBER, 11);
-        LocalDate _12Nov2025 = LocalDate.of(2025, Month.NOVEMBER, 12);
-        LocalDate _01Jan2026 = LocalDate.of(2026, Month.JANUARY, 1);
+        LocalDate _11Nov2026 = LocalDate.of(2026, Month.NOVEMBER, 11);
+        LocalDate _12Nov2026 = LocalDate.of(2026, Month.NOVEMBER, 12);
+        LocalDate _01Jan2027 = LocalDate.of(2027, Month.JANUARY, 1);
+
         // order flouted -> IllegalArgumentException thrown
         IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () ->
-                ValidationHelper.validateDateOrder(_12Nov2025, _11Nov2025)
+                ValidationHelper.validateDateOrder(_12Nov2026, _11Nov2026)
         );
+
         String expected1 = String.format("Illegal argument: '%s' is NOT before '%s'!!",
-                FormatHelper.displayAsMMMdyyyy(_12Nov2025),
-                FormatHelper.displayAsMMMdyyyy(_11Nov2025));
+                FormatHelper.displayAsMMMdyyyy(_12Nov2026),
+                FormatHelper.displayAsMMMdyyyy(_11Nov2026));
+
         assertEquals(expected1, ex1.getMessage());
 
         // order flouted across years-> IllegalArgumentException thrown
         IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () ->
-                ValidationHelper.validateDateOrder(_01Jan2026, _11Nov2025)
+                ValidationHelper.validateDateOrder(_01Jan2027, _11Nov2026)
         );
+
         String expected2 = String.format("Illegal argument: '%s' is NOT before '%s'!!",
-                FormatHelper.displayAsMMMdyyyy(_01Jan2026),
-                FormatHelper.displayAsMMMdyyyy(_11Nov2025));
+                FormatHelper.displayAsMMMdyyyy(_01Jan2027),
+                FormatHelper.displayAsMMMdyyyy(_11Nov2026));
+
         assertEquals(expected2, ex2.getMessage());
     }
 

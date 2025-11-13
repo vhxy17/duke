@@ -10,8 +10,8 @@ import com.golden.util.ValidationHelper;
 import java.time.LocalDate;
 
 public class EventCommand extends Command {
-    private final String fromPrefix = "/from ";
-    private final String toPrefix = "/to ";
+    private final String fromPrefix = "/from";
+    private final String toPrefix = "/to";
     private final String priorityPrefix = "/priority";
 
     private final String taskString;
@@ -24,10 +24,10 @@ public class EventCommand extends Command {
     private Priority priority;
 
     public EventCommand(String[] args) throws BotException {
-        this.taskString = args[0];
-        this.fromString = args[1];
-        this.toString = args[2];
-        this.priorityString = args[3];
+        this.taskString = args[0].trim();
+        this.fromString = args[1].trim();
+        this.toString = args[2].trim();
+        this.priorityString = args[3].trim();
 
 //        validateTaskDescription(taskString);
         validatePrefixArgs(fromString, fromPrefix);

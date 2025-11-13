@@ -33,8 +33,10 @@ public class ValidationHelper {
         }
         try {
             // ISO_LOCAL_DATE expects exactly yyyy-MM-dd format
-            LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
-            return true;
+            LocalDate parsedDate = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+
+            // Valid only if it's after today's date (future date)
+            return parsedDate.isAfter(LocalDate.now());
         } catch (DateTimeParseException e) {
             return false;
         }
