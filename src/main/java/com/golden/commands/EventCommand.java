@@ -29,7 +29,6 @@ public class EventCommand extends Command {
         this.toString = args[2].trim();
         this.priorityString = args[3].trim();
 
-//        validateTaskDescription(taskString);
         validatePrefixArgs(fromString, fromPrefix);
         validatePrefixArgs(toString, toPrefix);
         validatePrefixArgs(priorityString, priorityPrefix);

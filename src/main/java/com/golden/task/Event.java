@@ -1,6 +1,5 @@
 package com.golden.task;
 
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.util.FormatHelper;
 
 import java.time.LocalDate;
@@ -41,6 +40,7 @@ public class Event extends Task{
     protected char renderTypeTag(){
         return 'E';
     }
+
     @Override
     public String serialise(){
         return String.format("%c | %c | %s | %s | %s | %s", renderTypeTag(), renderStatusDigit(),

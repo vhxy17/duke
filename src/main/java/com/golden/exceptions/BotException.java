@@ -25,8 +25,8 @@ public class BotException extends Exception{
         }
         // Add a separator only if the base message doesn't already end suitably
         char last = base.charAt(base.length() - 1);
-        boolean endsWithPunct = last == '.' || last == '!' || last == '?';
-        return endsWithPunct ? (base + " " + detail) : (base + ": " + detail);
+        boolean isEndWithPunct = last == '.' || last == '!' || last == '?';
+        return isEndWithPunct ? (base + " " + detail) : (base + ": " + detail);
     }
 
     @Override

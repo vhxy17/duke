@@ -1,7 +1,5 @@
 package com.golden.task;
 
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
-
 public abstract class Task {
     private String description;
     private boolean isDone;

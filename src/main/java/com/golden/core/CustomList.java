@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomList implements Iterable<Task> {
-    //    private static Task[] taskList;
-    // Change from Task[] to ArrayList
+    // Changed from Task[] to ArrayList
     private static ArrayList<Task> taskList;
-    private static int listSize;
 
     public CustomList(ArrayList<Task> tasks){
         this.taskList = (tasks == null) ? new ArrayList<>() : tasks;
@@ -52,7 +50,7 @@ public class CustomList implements Iterable<Task> {
             int number = i+1;
             message += String.format("%d.", number);
             message += taskList.get(i).toString();
-            if (number != listSize){
+            if (number != getSize()){
                 message += "\n";
             }
         }

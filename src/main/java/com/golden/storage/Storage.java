@@ -131,9 +131,10 @@ public class Storage {
             throw new StorageFileNotFoundException(
                     "Unable to open file: " + file.getPath()
             );
-        } catch (BotException e ){
-            System.out.println(e.toString());
         }
+//        catch (BotException e ){
+//            System.out.println(e.toString());
+//        }
         return tasks;
     }
 
@@ -144,7 +145,7 @@ public class Storage {
      *
      * @return  a File that saves the current state of Tasks or a {@code Throwable} instance.
      */
-    public File writeToFile(CustomList tasklist) throws StorageFileParseException{
+    public void writeToFile(CustomList tasklist) throws StorageFileParseException{
         try (FileWriter fw = new FileWriter(file, /* append */ false);
              BufferedWriter bw = new BufferedWriter(fw)) {
 
@@ -154,7 +155,6 @@ public class Storage {
                 bw.newLine();                            // platform newline
             }
             bw.flush();                                   // explicit (optional)
-            return file;
 
         } catch (IOException e) {
             // Rethrow (i.e. wrap) as a checked StorageException

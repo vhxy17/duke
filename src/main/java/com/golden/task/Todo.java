@@ -1,7 +1,5 @@
 package com.golden.task;
 
-import com.golden.exceptions.validationErrors.IllegalArgumentException;
-
 public class Todo extends Task{
 
     public Todo(String description, Priority priority) {

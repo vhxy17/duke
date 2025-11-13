@@ -54,7 +54,7 @@ public class CommandParserTest {
         MissingArgumentException ex2 = assertThrows(MissingArgumentException.class, () ->
                 CommandParser.parseCommand("mark    ")
         );
-        String expected2 = "task number is missing!";
+        String expected2 = "task number is missing!!";
         assertEquals(expected2, ex2.getMessage());
 
         // test 'mark' with 2 args

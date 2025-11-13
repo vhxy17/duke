@@ -42,37 +42,27 @@ public final class CommandParser {
                 return new EchoCommand(command);
             case "bye":
             case "goodbye":
-                // check no arguments is passed in after command; suggest corrective actions.
+                // check no further arguments are passed in after command, else suggest corrective actions.
                 ParseHelper.requireArgs(parts, 1, "Try 'bye' or 'goodbye'.");
                 return new ExitCommand();
             case "list":
-                // check no arguments is passed in after command; suggest corrective actions.
+                // check no further arguments are passed in after command, else suggest corrective actions.
                 ParseHelper.requireArgs(parts, 1, "Try 'list'.");
                 return new ListCommand();
             case "mark":
-                try{
-                    return new MarkCommand(TaskNumberParser.parseNumber(parts[1].trim()));
-                } catch (ArrayIndexOutOfBoundsException e){
-                    throw new MissingArgumentException("task number is missing!");
-                }
+                // guard against empty argument being passed in after command when at least one is expected.
+                ParseHelper.requireArgs(parts, 2, "task number");
+                return new MarkCommand(TaskNumberParser.parseNumber(parts[1].trim()));
             case "unmark":
-                try{
-                    return new UnmarkCommand(TaskNumberParser.parseNumber(parts[1].trim()));
-                } catch (ArrayIndexOutOfBoundsException e){
-                    throw new MissingArgumentException("task number is missing!");
-                }
+                ParseHelper.requireArgs(parts, 2, "task number");
+                return new UnmarkCommand(TaskNumberParser.parseNumber(parts[1].trim()));
             case "delete":
-                try{
-                    return new DeleteCommand(TaskNumberParser.parseNumber(parts[1].trim()));
-                } catch (ArrayIndexOutOfBoundsException e){
-                    throw new MissingArgumentException("task number is missing!");
-                }
+                ParseHelper.requireArgs(parts, 2, "task number");
+                return new DeleteCommand(TaskNumberParser.parseNumber(parts[1].trim()));
             case "todo":
-                // guard against case where only 'todo' is passed without any following args.
+                // guard against case where command is passed when more args are expected.
                 ParseHelper.requireArgs(parts, 2, "task description");
-                // handle if parts[1] is null in parseTodoCommand
-                String[] todoArgs = TaskParser.parseTodoCommand(parts[1].trim());
-                return new TodoCommand(todoArgs);
+                return new TodoCommand(TaskParser.parseTodoCommand(parts[1].trim()));
             case "deadline":
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] deadlineArgs = TaskParser.parseDeadlineCommand(parts[1].trim());
@@ -80,7 +70,6 @@ public final class CommandParser {
             case "event":
                 ParseHelper.requireArgs(parts, 2, "task description");
                 String[] eventArgs = TaskParser.parseEventCommand(parts[1].trim());
-//                printArray(eventArgs);
                 return new EventCommand(eventArgs);
             case "find":
                 ParseHelper.requireArgs(parts, 2, "search details");
@@ -89,18 +78,4 @@ public final class CommandParser {
                 throw new UnknownCommandException(command);
         }
     }
-
-
-    private static void printArray(String[] arr) {
-        System.out.println(java.util.Arrays.toString(arr));
-    }
 }
-
-
-/*
-* unhandled exceptions:
-* 1. checks for specific keyword- e.g. /by, /from /to                   //done
-* 2. check for empty strings after /by, /from, /to                      //done
-* 3. catch ArrayIndexOutOfBoundsException from todo/deadline/event      //done
-* 4. 'todo 2025-11-11' causes error- UnsupportedTemporalTypeException. // done
-* */

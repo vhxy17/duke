@@ -18,95 +18,59 @@ import java.util.Locale;
 public class TaskParser {
     private TaskParser(){}
 
-    private static boolean isDone(String doneStr, int lineNo) throws StorageFileParseException {
-        if ("1".equals(doneStr)) {
-            return true;
-        }
-        else if ("0".equals(doneStr)) {
-            return false;
-        } else {
-            throw new StorageFileParseException(String.format(
-                "Line: %d: done flag must be 0 or 1. Got '%s'.", lineNo, doneStr));
-        }
-    }
     /** Parses a line in the following format: '[Task type] | [isDone] | [Task Description] | [Date 1] | [Date 2]'
      *  into a task (Todo, Deadline, Event)
      *
      * @return  a Task object that could be a 'Todo', 'Deadline' or 'Event' or a {@code Throwable} Exception.
      *  */
     public static Task parseStorageLine(String rawLine, int lineNo) throws BotException {
-        if (rawLine == null){
-            throw new StorageFileParseException(
-                    String.format("Line %d: null line.", lineNo));
+        String line = processRawLine(rawLine, lineNo);
+        if (line == null) {
+            return null; // caller treats this as "no task on this line"
         }
-        String line = rawLine.trim();
-        // check for empty/comment lines
-        if (line.isEmpty() || line.startsWith("#")){
-            return null;    // signal "skip"
-        }
+
+        // safe: line is non-null and non-empty here
         // Split by pipe; allow spaces around '|'   →  "T | 1 | read book | LOW"
         String[] parts = line.split("\\s*\\|\\s*");
         int minimumParts = 4;
         if (parts.length < minimumParts) {
-            throw new StorageFileParseException(String.format(
-                    "Line %d: expects at least %d fields. Got: %d", lineNo, minimumParts, parts.length));
+            throw lineError(lineNo,
+                    String.format("expects at least %d fields. Got: %d", minimumParts, parts.length));
         }
         String type = parts[0].trim().toUpperCase(Locale.ROOT);
-        String doneStr = parts[1].trim();
+        boolean isDone = isDone(parts[1].trim(), lineNo);
         String desc = parts[2].trim();
-        String priorityString = parts[parts.length - 1];
-        Priority priority = ParseHelper.convertStringToPriority(priorityString);
-        boolean isDone = isDone(doneStr, lineNo);
-
         if (desc.isEmpty()) {
-            throw new StorageFileParseException(String.format(
-                    "Line %d: description cannot be empty.", lineNo));
+            throw lineError(lineNo, "description cannot be empty.");
         }
+        Priority priority = ParseHelper.convertStringToPriority(parts[parts.length - 1]);
 
         switch (type) {
             case "T":
                 if (parts.length != 4) {
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: Todo must have this format: 'T | isDone | task | priority'.", lineNo));
+                    throw lineError(lineNo, "Todo must have this format: 'T | isDone | task | priority'.");
                 }
                 return new Todo(desc, isDone, priority);
 
             case "D":
                 if (parts.length != 5) {
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: Deadline must have this format: 'D | isDone | task | by | priority'", lineNo));
+                    throw lineError(lineNo, "Deadline must have this format: 'D | isDone | task | by | priority'.");
                 }
-                String endDateString = parts[3].trim();
-                if (endDateString.isEmpty()) {
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: Deadline 'by' cannot be empty.", lineNo));
-                }
-                return new Deadline(desc, isDone, ParseHelper.convertStringToDate(endDateString), priority);
+                LocalDate byDate = ParseHelper.convertStringToDate(parts[3].trim());
+                return new Deadline(desc, isDone, byDate, priority);
 
             case "E":
                 if (parts.length != 6) {
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: Event must have this format: 'E | isDone | task | from | to | priority'.", lineNo));
+                    throw lineError(lineNo, "Event must have this format: 'E | isDone | task | from | to | priority'.");
                 }
-                String fromString = parts[3].trim();
-                String toString = parts[4].trim();
-                if (fromString.isEmpty() || toString.isEmpty()) {
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: Event 'from' and/or 'to' cannot be empty.", lineNo));
-                }
-                LocalDate from = ParseHelper.convertStringToDate(fromString);
-                LocalDate to = ParseHelper.convertStringToDate(toString);
-                try {
-                    ValidationHelper.validateDateOrder(from, to);
-                } catch (IllegalArgumentException e){
-                    throw new StorageFileParseException(String.format(
-                            "Line %d: 'From' date is before 'To' date.", lineNo));
-                }
+                LocalDate from = ParseHelper.convertStringToDate(parts[3].trim());
+                LocalDate to = ParseHelper.convertStringToDate(parts[4].trim());
+                ValidationHelper.validateDateOrder(from, to);
                 return new Event(desc, isDone, from, to, priority);
 
             default:
-                throw new StorageFileParseException(String.format(
-                        "Line %d: unknown task type '%s'. \nValid task types: 'T', 'D', or 'E'.", lineNo, type));
+                throw lineError(lineNo, String.format(
+                "unknown task type '%s'. \nValid task types: 'T', 'D', or 'E'.", rawLine));
         }
     }
 
@@ -139,6 +103,35 @@ public class TaskParser {
         String[] todoArgs = ParseHelper.splitOnSlashSections(rawArgs.trim());
         ParseHelper.requireArgs(todoArgs, 2, "task description or priority");
         return todoArgs;
+    }
+
+    private static boolean isDone(String doneStr, int lineNo) throws StorageFileParseException {
+        if ("1".equals(doneStr)) {
+            return true;
+        }
+        else if ("0".equals(doneStr)) {
+            return false;
+        } else {
+            throw new StorageFileParseException(String.format(
+                    "Line: %d: done flag must be 0 or 1. Got '%s'.", lineNo, doneStr));
+        }
+    }
+
+    private static String processRawLine(String rawLine, int lineNo) throws StorageFileParseException {
+        if (rawLine == null) {
+            throw lineError(lineNo, "null line.");
+        }
+
+        String line = rawLine.trim();
+        // check for empty/comment lines
+        if (line.isEmpty() || line.startsWith("#")){
+            return null;    // signal "skip"
+        }
+        return line;
+    }
+
+    private static StorageFileParseException lineError(int lineNo, String message) {
+        return new StorageFileParseException(String.format("Line %d: %s", lineNo, message));
     }
 }
 

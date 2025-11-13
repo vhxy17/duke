@@ -9,8 +9,8 @@ import com.golden.util.ParseHelper;
 import java.time.LocalDate;
 
 public class DeadlineCommand extends Command {
-    private final String byPrefix = "/by ";
-    private final String priorityPrefix = "/priority ";
+    private final String byPrefix = "/by";
+    private final String priorityPrefix = "/priority";
 
     private final String taskString;
     private final String byString;
@@ -24,7 +24,6 @@ public class DeadlineCommand extends Command {
         this.byString = args[1];
         this.priorityString = args[2];
 
-//        validateTaskDescription(taskString);
         validatePrefixArgs(byString, byPrefix);
         validatePrefixArgs(priorityString, priorityPrefix);
         String validByString = extractArgFromPrefix(byString, byPrefix);

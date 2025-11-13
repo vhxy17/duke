@@ -6,6 +6,7 @@ public enum Priority {
     LOW(10);
 
     private final int weight;
+
     Priority(int weight){
         this.weight = weight;
     }

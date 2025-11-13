@@ -17,7 +17,6 @@ public class TodoCommand extends Command {
         this.taskString = args[0];
         this.priorityString = args[1];
 
-//        validateTaskDescription(taskString);
         validatePrefixArgs(priorityString, priorityPrefix);
         String validPriorityString = extractArgFromPrefix(priorityString, priorityPrefix);
         this.priority = ParseHelper.convertStringToPriority(validPriorityString);

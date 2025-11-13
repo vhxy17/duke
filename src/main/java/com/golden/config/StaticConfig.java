@@ -1,10 +1,10 @@
 package com.golden.config;
 
-/*
+/**
  * This class defines the constraints and constants of the Chatbot app.
  * static = the attributes are shared across all instances
  * final = the values cannot be changed
- * */
+ */
 
 public final class StaticConfig {
     // #constraint: sets the hard limit for TaskList

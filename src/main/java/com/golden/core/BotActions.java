@@ -61,6 +61,7 @@ public class BotActions {
     public void addDeadline(String task, LocalDate deadlineBy, Priority priority) throws BotException {
         myList.addDeadline(task, deadlineBy, priority);
     }
+
     public void addEvent(String task, LocalDate eventFrom, LocalDate eventTo, Priority priority)
             throws BotException {
         myList.addEvent(task, eventFrom, eventTo, priority);

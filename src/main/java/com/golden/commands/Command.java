@@ -21,13 +21,6 @@ public abstract class Command {
 
     public abstract void execute(BotActions actions, Ui ui) throws BotException;
 
-    protected boolean validateTaskDescription(String description) throws IllegalArgumentException {
-        if (description.isBlank()){
-            throw new IllegalArgumentException("empty input. \nPlease provide a task description.");
-        }
-        return true;
-    }
-
     /**
      * Checks that the prefix is contained within the String input.
      * @param string The input to check against.
