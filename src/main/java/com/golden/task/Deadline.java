@@ -14,11 +14,6 @@ public class Deadline extends Task{
         setPriority(priority);
     }
 
-    public Deadline(String description, boolean isDone, LocalDate by) {
-        super(description, isDone);
-        this.endDate = by;
-    }
-
     public Deadline(String description, boolean isDone, LocalDate by, Priority priority) {
         super(description, isDone, priority);
         this.endDate = by;

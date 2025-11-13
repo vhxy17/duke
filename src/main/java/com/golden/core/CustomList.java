@@ -11,6 +11,7 @@ import com.golden.util.ValidationHelper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class CustomList implements Iterable<Task> {
@@ -94,6 +95,28 @@ public class CustomList implements Iterable<Task> {
             }
         }
         return matches;
+    }
+
+    // Feature to sort list by priority level (weights)
+    private static int weightOf(Task t) {
+        if (t == null) return Integer.MIN_VALUE; // push nulls to the start in ASC
+        Priority p = t.getPriority();
+        return (p == null) ? Integer.MIN_VALUE : p.getWeight();
+    }
+
+    private static final Comparator<Task> BY_PRIORITY_ASC =
+            Comparator.comparingInt(CustomList::weightOf);
+
+    private static final Comparator<Task> BY_PRIORITY_DESC =
+            BY_PRIORITY_ASC.reversed();
+
+    // --- In-place sort (mutates taskList) ---
+    public void sortByPriorityAscending() {
+        taskList.sort(BY_PRIORITY_ASC);
+    }
+
+    public void sortByPriorityDescending() {
+        taskList.sort(BY_PRIORITY_DESC);
     }
 
 }

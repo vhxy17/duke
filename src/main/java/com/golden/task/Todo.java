@@ -6,9 +6,7 @@ public class Todo extends Task{
         super(description);
         setPriority(priority);
     }
-    public Todo(String description, boolean isDone) {
-        super(description, isDone);
-    }
+
     public Todo(String description, boolean isDone, Priority priority) {
         super(description, isDone, priority);
     }

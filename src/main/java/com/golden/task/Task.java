@@ -8,7 +8,7 @@ public abstract class Task {
     public Task(String description) {
         this.description = description.trim();
         this.isDone = false;
-        this.priority = Priority.LOW;
+        setPriority(Priority.LOW);  //default if no priority given
     }
     public Task(String description, boolean isDone) {
         this.description = description.trim();
@@ -23,12 +23,6 @@ public abstract class Task {
     public String getTaskDescription() {
         return this.description;
     }
-//    protected boolean validateTaskDescription(String description) throws IllegalArgumentException {
-//        if (description.isBlank()){
-//            throw new IllegalArgumentException("empty input. \nPlease provide a task description.");
-//        }
-//        return true;
-//    }
     public void setIsDone(boolean isDone){
         this.isDone = isDone;
     }
@@ -57,16 +51,3 @@ public abstract class Task {
         this.priority = (p == null) ? Priority.LOW : p;
     }
 }
-
-/*
-Fields: description, done (boolean).
-
-
-renderForList() -> String
-Base part: "[T][X] read book". Subclasses append extras.
-
-serialize() -> String
-Emit storage line (e.g., T | 1 | read book | June 6th for Deadline).
-
-Getters/setters as needed.
- */

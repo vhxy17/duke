@@ -14,11 +14,7 @@ public class Event extends Task{
         this.endDate = to;
         setPriority(priority);
     }
-    public Event(String description, boolean isDone, LocalDate from, LocalDate to) {
-        super(description, isDone);
-        this.startDate = from;
-        this.endDate = to;
-    }
+
     public Event(String description, boolean isDone, LocalDate from, LocalDate to, Priority priority) {
         super(description, isDone, priority);
         this.startDate = from;

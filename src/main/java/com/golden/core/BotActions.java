@@ -24,6 +24,8 @@ public class BotActions {
     }
 
     public String listTasks() {
+        // list is automatically sorted from High to Low priority on 'list' command
+        myList.sortByPriorityDescending();
         return myList.getList();
     }
 
