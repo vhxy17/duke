@@ -5,30 +5,48 @@ public abstract class Task {
     private boolean isDone;
     protected Priority priority;
 
-    public Task(String description) {
-        this.description = description.trim();
-        this.isDone = false;
-        setPriority(Priority.LOW);  //default if no priority given
-    }
-    public Task(String description, boolean isDone) {
-        this.description = description.trim();
-        this.isDone = isDone;
-        this.priority = Priority.LOW;
+    public Task(String description, Priority priority) {
+        assert priority != null;
+        setDescription(description.trim());
+        setPriority(priority);
+        setIsDone(false); // default if no isDone status given
     }
     public Task(String description, boolean isDone, Priority priority) {
-        this.description = description.trim();
-        this.isDone = isDone;
-        this.priority = (priority == null) ? Priority.LOW : priority;
+        assert priority != null: "Priority must not be null.";
+        setDescription(description.trim());
+        setIsDone(isDone);
+        setPriority(priority);
     }
+
+    // Getters
     public String getTaskDescription() {
         return this.description;
+    }
+    public Priority getPriority() {
+        return priority;
+    }
+    public boolean getIsDone(){
+        return isDone;
+    }
+
+    // Setters
+    public void setDescription(String taskDescription){
+        this.description = taskDescription;
+    }
+    public void setPriority(Priority p){
+        // extra guard in case priority is null
+        this.priority = (p == null) ? Priority.LOW : p;
     }
     public void setIsDone(boolean isDone){
         this.isDone = isDone;
     }
-    protected boolean isDone(){
-        return isDone;
-    }
+
+    // Renderers, Serialisers, Print Formatters
+    /**
+     * Method to generate the relevant 'done' status marker of this task instance
+     *
+     * @return a 'X' if taks is done and blank (" ") if not done
+     */
     protected char renderStatusCharacter(){
         return isDone ? 'X' : ' ';
     };
@@ -36,18 +54,15 @@ public abstract class Task {
         return isDone ? '1' : '0';
     };
     protected abstract char renderTypeTag();
+    /**
+     * Method to generate documentation for the task in a specific format
+     *
+     * @return a string in the format: [Task type} | [isDone status] | [task description] | (...) | [priority]
+     */
     public abstract String serialise();
     public abstract String toString();
-    public Priority getPriority() {
-        return priority;
-    }
     public String toPriorityString(Priority priority) {
-        if (priority == null) {
-            return "LOW";
-        }
+        assert priority != null;
         return priority.name();
-    }
-    public void setPriority(Priority p){
-        this.priority = (p == null) ? Priority.LOW : p;
     }
 }

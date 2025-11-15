@@ -20,6 +20,9 @@ public class DeadlineCommand extends Command {
     private Priority priority;
 
     public DeadlineCommand(String[] args) throws BotException {
+        // Assumes that the existence of all args are checked/caught before reaching this constructor
+        assert args != null && args.length == 3;
+        assert args[1] != null;
         this.taskString = args[0];
         this.byString = args[1];
         this.priorityString = args[2];
@@ -34,8 +37,14 @@ public class DeadlineCommand extends Command {
 
     @Override
     public void execute(BotActions actions, Ui ui) throws BotException {
-        actions.addDeadline(taskString, byDate, priority);
-        ui.printBotReply(actions.constructAddTaskMsg());
+        assert taskString != null
+                && !taskString.isBlank()
+                && byDate != null
+                && priority != null;
+        if (actions.addDeadline(taskString, byDate, priority)){
+            ui.printBotReply(actions.constructAddTaskMsg());
+        } else {
+            ui.printBotReply("Sorry, list is full!");
+        }
     }
 }
-

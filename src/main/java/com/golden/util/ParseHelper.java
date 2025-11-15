@@ -1,6 +1,6 @@
 package com.golden.util;
 
-import com.golden.exceptions.BotException;
+import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.exceptions.ParseException;
 import com.golden.exceptions.parseErrors.MissingArgumentException;
 import com.golden.task.Priority;
@@ -49,7 +49,7 @@ public class ParseHelper {
     /**
      * Parse the String input and split on:
      *  [0]: leading text before any "/section"
-     *  [1..]: each "/section" including the leading slash, e.g. "/from monday"
+     *  [1..]: each "/section" including the leading slash, e.g. "/from [date]"
      *
      *  If no "/section" is found, returns a single-element array.
      *
@@ -118,14 +118,13 @@ public class ParseHelper {
                     "'%s'. \nPlease enter a valid future date in this format: yyyy-MM-dd.", dateString));
     }
 
-    /** Convert the String input into a validated {@code Priority} enum object.
+    /** Convert the string input of priority into a validated {@code Priority} object.
      *
-     *  @return a {@code Priority} object of this {@code Throwable} instance (which may be {@code null}).  */
-    public static Priority convertStringToPriority(String priorityString) throws BotException {
+     *  @return a {@code Priority} object of this {@code Throwable} instance (which may be {@code null}).
+     */
+    public static Priority convertStringToPriority(String priorityString) throws IllegalArgumentException {
+        assert priorityString != null && !priorityString.isBlank();
         String normalisedPriority;
-        if (priorityString == null || priorityString.isBlank()) {
-            throw new MissingArgumentException("priority cannot be null.");
-        }
         normalisedPriority = priorityString.trim().toUpperCase();
 
         for (Priority p : Priority.values()){

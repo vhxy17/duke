@@ -9,28 +9,29 @@ public class Deadline extends Task{
     private LocalDate endDate;
 
     public Deadline(String description, LocalDate by, Priority priority) {
-        super(description);
-        this.endDate = by;
-        setPriority(priority);
+        super(description, priority);
+        setBy(by);
     }
-
     public Deadline(String description, boolean isDone, LocalDate by, Priority priority) {
         super(description, isDone, priority);
-        this.endDate = by;
+        setBy(by);
     }
 
-    protected void setBy(LocalDate by){
-        this.endDate = by;
-    }
-
+    // Getters
     protected LocalDate getEndDate(){
         return this.endDate;
     }
 
-    protected String getSerialisedEndDate(){
-        return endDate.format(DateTimeFormatter.ofPattern("yyyy-mm-dd"));
+    // Setters
+    protected void setBy(LocalDate by){
+        this.endDate = by;
     }
 
+    /**
+     * Method to generate the relevant type character for serialising the task or representing the task
+     *
+     * @return a character unique to 'Deadline' task type
+     */
     @Override
     protected char renderTypeTag() {
         return 'D';

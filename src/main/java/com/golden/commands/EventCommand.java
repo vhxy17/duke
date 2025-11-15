@@ -24,6 +24,8 @@ public class EventCommand extends Command {
     private Priority priority;
 
     public EventCommand(String[] args) throws BotException {
+        // Assumes that the existence of all args are checked/caught before reaching this constructor
+        assert args != null && args.length == 4;
         this.taskString = args[0].trim();
         this.fromString = args[1].trim();
         this.toString = args[2].trim();
@@ -45,7 +47,16 @@ public class EventCommand extends Command {
 
     @Override
     public void execute(BotActions actions, Ui ui) throws BotException {
-        actions.addEvent(taskString, fromDate, toDate, priority);
-        ui.printBotReply(actions.constructAddTaskMsg());
+        assert taskString != null
+                && !taskString.isBlank()
+                && fromDate != null
+                && toDate != null
+                && priority != null;
+        ;
+        if (actions.addEvent(taskString, fromDate, toDate, priority)){
+            ui.printBotReply(actions.constructAddTaskMsg());
+        } else {
+            ui.printBotReply("Sorry, list is full!");
+        }
     }
 }

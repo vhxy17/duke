@@ -15,9 +15,9 @@ public class ValidationHelper {
      *
      *  @return boolean value of this {@code Throwable} instance (which may be {@code null}).
      * */
-    public static boolean isNumberInRange(int lowerLimit, int upperLimit, int number )
+    public static boolean isNumberInRange(int upperLimit, int number )
             throws IllegalArgumentException {
-        if (number < lowerLimit || number > upperLimit){
+        if (number < 1 || number > upperLimit){
             throw new IllegalArgumentException(String.format("'%d'. Number is out of range.", number));
         }
         return true;

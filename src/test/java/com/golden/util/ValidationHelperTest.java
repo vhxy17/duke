@@ -17,16 +17,16 @@ public class ValidationHelperTest {
     @Test
     public void isNumberInRange_success() throws Exception {
         // number at lower bound test
-        assertEquals(true, ValidationHelper.isNumberInRange(1, 10, 1));
+        assertEquals(true, ValidationHelper.isNumberInRange(10, 1));
         // number at upper bound test
-        assertEquals(true, ValidationHelper.isNumberInRange(1, 10, 10));
+        assertEquals(true, ValidationHelper.isNumberInRange(10, 10));
     }
 
     @Test
     public void isNumberInRange_exceptionThrown() {
         // number out of bounds
         try {
-            assertEquals(false, ValidationHelper.isNumberInRange(1, 10, -1));
+            assertEquals(false, ValidationHelper.isNumberInRange(10, -1));
             fail();     //if test reaches this line, test fails
         } catch (Exception e) {
             assertEquals("Illegal argument: '-1'. Number is out of range.", e.getMessage());

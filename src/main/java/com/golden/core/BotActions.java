@@ -1,6 +1,5 @@
 package com.golden.core;
 
-import com.golden.exceptions.BotException;
 import com.golden.storage.Storage;
 import com.golden.exceptions.validationErrors.IllegalArgumentException;
 import com.golden.exceptions.storageErrors.StorageFileParseException;
@@ -56,17 +55,25 @@ public class BotActions {
         myList.markTask(taskNumber, false);
     }
 
-    public void addTodo(String task, Priority priority) throws BotException {
-        myList.addTodo(task, priority);
+    public boolean addTodo(String task, Priority priority) {
+        assert task != null && !task.isBlank() : "Task description must not be null or blank";
+        assert priority != null : "Priority must not be null";
+        return myList.addTodo(task, priority);
     }
 
-    public void addDeadline(String task, LocalDate deadlineBy, Priority priority) throws BotException {
-        myList.addDeadline(task, deadlineBy, priority);
+    public boolean addDeadline(String task, LocalDate deadlineBy, Priority priority) {
+        assert task != null && !task.isBlank() : "Task description must not be null or blank";
+        assert deadlineBy != null : "By date must not be null";
+        assert priority != null : "Priority must not be null";
+        return myList.addDeadline(task, deadlineBy, priority);
     }
 
-    public void addEvent(String task, LocalDate eventFrom, LocalDate eventTo, Priority priority)
-            throws BotException {
-        myList.addEvent(task, eventFrom, eventTo, priority);
+    public boolean addEvent(String task, LocalDate eventFrom, LocalDate eventTo, Priority priority) {
+        assert task != null && !task.isBlank() : "Task description must not be null or blank";
+        assert eventFrom != null : "From date must not be null";
+        assert eventTo != null : "To date must not be null";
+        assert priority != null : "Priority must not be null";
+        return myList.addEvent(task, eventFrom, eventTo, priority);
     }
 
     public void delete(int taskNumber) throws IllegalArgumentException {
@@ -89,6 +96,7 @@ public class BotActions {
     }
 
     public List<Task> searchTasks(String searchParams){
+        assert searchParams != null && !searchParams.isBlank() : "Search parameters must not be null or blank";
         return myList.findByKeyword(searchParams);
     }
 }

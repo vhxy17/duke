@@ -22,9 +22,10 @@ public final class CommandParser {
     private CommandParser(){}
 
     /**
-     *  Returns the Command object that is detected at the head of the raw string.
+     *  Parses an input line and returns the relevant Command object, if any, that is
+     *  detected at the head of the raw string.
      *
-     *  @param line The raw string of the full command.
+     *  @param line The raw form of the full command.
      *
      *  @return     the Command object created from parsing the first word of the line,
      *              or a {@code Throwable} Exception.

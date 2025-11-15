@@ -24,23 +24,25 @@ public class CustomList implements Iterable<Task> {
     protected int getSize(){
         return taskList.size();
     }
-    private void addTask(Task task){
+    private boolean addTask(Task task){
+        assert task != null;
         // checks tasklist capacity before adding new task
         if (taskList.size() < StaticConfig.MAX_TASKS) {
             taskList.add(task);
+            return true;
         } else {
-            System.out.println("List is full!");
+            return false;
         }
     }
-    protected void addTodo(String taskDescription, Priority priority) throws IllegalArgumentException {
-        addTask(new Todo(taskDescription, priority));
+    protected boolean addTodo(String taskDescription, Priority priority) {
+        return addTask(new Todo(taskDescription, priority));
     }
-    protected void addDeadline(String taskDescription, LocalDate endDate, Priority priority) throws IllegalArgumentException {
-        addTask(new Deadline(taskDescription, endDate, priority));
+    protected boolean addDeadline(String taskDescription, LocalDate endDate, Priority priority) {
+        return addTask(new Deadline(taskDescription, endDate, priority));
     }
-    protected void addEvent(String taskDescription, LocalDate startDate,
-                            LocalDate endDate, Priority priority) throws IllegalArgumentException {
-        addTask(new Event(taskDescription, startDate, endDate, priority));
+    protected boolean addEvent(String taskDescription, LocalDate startDate,
+                            LocalDate endDate, Priority priority) {
+        return addTask(new Event(taskDescription, startDate, endDate, priority));
     }
     protected String getList() {
         if (taskList.isEmpty()){
@@ -58,17 +60,17 @@ public class CustomList implements Iterable<Task> {
         return message;
     }
     protected void markTask(int taskNumber, boolean isMark) throws IllegalArgumentException {
-        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
+        ValidationHelper.isNumberInRange(taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
         taskList.get(taskIndex).setIsDone(isMark);
     }
     protected Task getTask(int taskNumber) throws IllegalArgumentException {
-        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
+        ValidationHelper.isNumberInRange(taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
         return taskList.get(taskIndex);
     }
     protected void deleteTask(int taskNumber) throws IllegalArgumentException {
-        ValidationHelper.isNumberInRange(1, taskList.size(), taskNumber);
+        ValidationHelper.isNumberInRange(taskList.size(), taskNumber);
         int taskIndex = taskNumber - 1;
         taskList.remove(taskIndex);
     }

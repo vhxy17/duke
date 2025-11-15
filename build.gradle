@@ -29,10 +29,13 @@ test {
 
 application {
     mainClass.set("com.golden.core.Golden")
+    applicationDefaultJvmArgs = ['-ea']  // enable assertions
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+//    archiveFileName = "golden.jar"
+    archiveBaseName = "golden"
+    archiveVersion = "v1.0"
     archiveClassifier = null
 }
 

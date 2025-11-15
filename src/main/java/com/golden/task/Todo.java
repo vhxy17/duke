@@ -3,14 +3,17 @@ package com.golden.task;
 public class Todo extends Task{
 
     public Todo(String description, Priority priority) {
-        super(description);
-        setPriority(priority);
+        super(description, priority);
     }
-
     public Todo(String description, boolean isDone, Priority priority) {
         super(description, isDone, priority);
     }
 
+    /**
+     * Method to generate the relevant type character for serialising the task or representing the task
+     *
+     * @return a character unique to 'Todo' task type
+     */
     @Override
     protected char renderTypeTag(){
         return 'T';
